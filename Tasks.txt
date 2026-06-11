@@ -1,0 +1,487 @@
+# Portfolio Management Dashboard
+## Business Requirement Document (BRD)
+
+### 1. Project Overview
+
+#### Project Name
+Portfolio Management Dashboard
+
+#### Objective
+Develop a web-based application that allows investors to manage and monitor their investment portfolios. The application should provide portfolio visibility, transaction history tracking, investment maintenance, and secure user authentication.
+
+---
+
+## 2. Scope
+
+### In Scope
+
+- User Authentication
+- Portfolio Dashboard
+- Investment Management
+- Transaction History
+- Performance Tracking
+- JWT Security
+- REST API
+- Docker Deployment
+
+### Out of Scope
+
+- Real-time stock market integration
+- Portfolio recommendations
+- AI investment advisory
+- Multi-factor authentication
+- Payment gateway integration
+
+---
+
+## 3. User Roles
+
+### Investor
+
+Can:
+
+- Login
+- View portfolio
+- Add investments
+- Edit investments
+- View transactions
+- Logout
+
+---
+
+## 4. Functional Requirements
+
+### FR-001 User Authentication
+
+#### Description
+
+User should authenticate using username/email and password.
+
+#### Inputs
+
+- Email
+- Password
+
+#### Outputs
+
+- JWT Token
+- User Profile
+
+#### Acceptance Criteria
+
+- Valid credentials allow login
+- Invalid credentials show error
+- JWT token generated after login
+- Protected APIs require token
+
+---
+
+### FR-002 Portfolio Dashboard
+
+#### Description
+
+Display portfolio summary.
+
+#### Dashboard Widgets
+
+1. Total Portfolio Value
+2. Total Investment Cost
+3. Total Profit/Loss
+4. Total Assets Count
+
+#### Asset Types
+
+- Stocks
+- Bonds
+- Mutual Funds
+
+#### Display Fields
+
+- Asset Name
+- Asset Type
+- Quantity
+- Purchase Price
+- Current Value
+- Profit/Loss
+- Return %
+
+---
+
+### FR-003 Transaction History
+
+#### Description
+
+Display investment transaction history.
+
+#### Transaction Types
+
+- BUY
+- SELL
+
+#### Fields
+
+- Transaction Id
+- Asset Name
+- Transaction Type
+- Quantity
+- Price
+- Date
+- Total Amount
+
+#### Filters
+
+- Date Range
+- Asset Type
+- Transaction Type
+
+---
+
+### FR-004 Add Investment
+
+#### Description
+
+User can add investment.
+
+#### Fields
+
+- Asset Name
+- Asset Type
+- Quantity
+- Purchase Price
+- Current Value
+- Purchase Date
+
+#### Validation
+
+- Asset Name mandatory
+- Asset Type mandatory
+- Quantity > 0
+- Purchase Price > 0
+- Current Value > 0
+
+---
+
+### FR-005 Edit Investment
+
+#### Description
+
+User can update existing investment.
+
+#### Editable Fields
+
+- Quantity
+- Current Value
+- Purchase Price
+
+#### Restrictions
+
+- Asset Type cannot be modified after creation
+
+---
+
+## 5. Business Rules
+
+### BR-001
+
+Only authenticated users can access dashboard.
+
+### BR-002
+
+Investment quantity must be positive.
+
+### BR-003
+
+Purchase price cannot be negative.
+
+### BR-004
+
+Current value must be greater than zero.
+
+### BR-005
+
+Profit/Loss Calculation
+
+Profit/Loss =
+(Current Value - Purchase Price)
+× Quantity
+
+### BR-006
+
+Performance Percentage
+
+((Current Value - Purchase Price)
+/ Purchase Price) × 100
+
+---
+
+## 6. Database Design
+
+### User
+
+| Field | Type |
+|---------|---------|
+| id | UUID |
+| email | VARCHAR |
+| passwordHash | VARCHAR |
+| createdAt | TIMESTAMP |
+
+### Investment
+
+| Field | Type |
+|---------|---------|
+| id | UUID |
+| userId | UUID |
+| assetName | VARCHAR |
+| assetType | VARCHAR |
+| quantity | DECIMAL |
+| purchasePrice | DECIMAL |
+| currentValue | DECIMAL |
+| purchaseDate | DATE |
+
+### Transaction
+
+| Field | Type |
+|---------|---------|
+| id | UUID |
+| investmentId | UUID |
+| transactionType | VARCHAR |
+| quantity | DECIMAL |
+| price | DECIMAL |
+| transactionDate | TIMESTAMP |
+
+---
+
+## 7. REST APIs
+
+### Authentication
+
+POST /api/auth/login
+
+POST /api/auth/logout
+
+GET /api/auth/profile
+
+### Portfolio
+
+GET /api/portfolio
+
+GET /api/portfolio/summary
+
+### Investments
+
+GET /api/investments
+
+GET /api/investments/{id}
+
+POST /api/investments
+
+PUT /api/investments/{id}
+
+DELETE /api/investments/{id}
+
+### Transactions
+
+GET /api/transactions
+
+POST /api/transactions
+
+---
+
+## 8. User Stories
+
+### US-001 Login
+
+As an Investor
+
+I want to login
+
+So that I can access my portfolio.
+
+---
+
+### US-002 View Portfolio
+
+As an Investor
+
+I want to view portfolio assets
+
+So that I can monitor investments.
+
+---
+
+### US-003 Add Investment
+
+As an Investor
+
+I want to add investment records
+
+So that I can track my assets.
+
+---
+
+### US-004 Edit Investment
+
+As an Investor
+
+I want to update investments
+
+So that values remain accurate.
+
+---
+
+### US-005 View Transaction History
+
+As an Investor
+
+I want to see transaction history
+
+So that I can review investment activity.
+
+---
+
+## 9. BDD Scenarios
+
+Feature: User Login
+
+Scenario: Successful Login
+
+Given User exists
+
+When User enters valid credentials
+
+Then JWT token should be generated
+
+And Dashboard should be displayed
+
+---
+
+Feature: Add Investment
+
+Scenario: Create Investment
+
+Given User is authenticated
+
+When User submits valid investment data
+
+Then Investment should be created
+
+And Success message displayed
+
+---
+
+Feature: View Portfolio
+
+Scenario: Display Portfolio
+
+Given User is authenticated
+
+When User opens dashboard
+
+Then Portfolio summary should be displayed
+
+And Asset list should be visible
+
+---
+
+Feature: View Transaction History
+
+Scenario: Transaction List
+
+Given User is authenticated
+
+When User opens transaction page
+
+Then Transactions should be displayed
+
+---
+
+## 10. TDD Requirements
+
+### Backend Tests
+
+Authentication Controller
+
+Investment Controller
+
+Portfolio Service
+
+Transaction Service
+
+Repository Layer
+
+JWT Middleware
+
+### Frontend Tests
+
+Login Component
+
+Dashboard Component
+
+Investment Form Component
+
+Transaction List Component
+
+Route Guards
+
+HTTP Interceptors
+
+---
+
+## 11. Technology Stack
+
+Frontend
+
+- Angular 20
+- Angular Material
+- RxJS
+- NgRx (Optional)
+
+Backend
+
+- Node.js
+- Express.js
+- TypeScript
+- JWT
+
+Database
+
+- SQLite
+
+Testing
+
+- Jest
+- Supertest
+- Cypress
+- Cucumber
+
+Deployment
+
+- Docker
+- Docker Compose
+
+---
+
+## 12. Non Functional Requirements
+
+Performance
+
+- API response < 500ms
+
+Security
+
+- JWT Authentication
+- Password Hashing
+
+Availability
+
+- 99% uptime
+
+Scalability
+
+- Support 10,000 investments per user
+
+Maintainability
+
+- SOLID Principles
+- Clean Architecture
+- Repository Pattern
