@@ -1,4 +1,4 @@
-import { Component, input, forwardRef, OnInit, effect } from '@angular/core';
+import { Component, input, forwardRef, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -28,23 +28,13 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   hint = input<string>('');
   control = input<FormControl>(new FormControl());
 
+  value: any = '';
+  disabled = false;
+
   onChange: any = () => {};
   onTouched: any = () => {};
 
-  constructor() {
-    // Sync external disables if control input changes
-    effect(() => {
-      const ctrl = this.control();
-      if (ctrl) {
-        ctrl.valueChanges.subscribe(val => {
-          this.onChange(val);
-        });
-      }
-    });
-  }
-
   ngOnInit(): void {
-    // Ensure parent listener is notified on touch
     this.control().statusChanges.subscribe(() => {
       if (this.control().touched) {
         this.onTouched();
@@ -52,7 +42,17 @@ export class InputComponent implements ControlValueAccessor, OnInit {
     });
   }
 
+  onInput(event: Event): void {
+    const val = (event.target as HTMLInputElement).value;
+    this.value = val;
+    this.onChange(val);
+    if (this.control()) {
+      this.control().setValue(val, { emitEvent: false });
+    }
+  }
+
   writeValue(value: any): void {
+    this.value = value;
     if (this.control() && this.control().value !== value) {
       this.control().setValue(value, { emitEvent: false });
     }
@@ -67,10 +67,13 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    if (isDisabled) {
-      this.control().disable({ emitEvent: false });
-    } else {
-      this.control().enable({ emitEvent: false });
+    this.disabled = isDisabled;
+    if (this.control()) {
+      if (isDisabled) {
+        this.control().disable({ emitEvent: false });
+      } else {
+        this.control().enable({ emitEvent: false });
+      }
     }
   }
 }

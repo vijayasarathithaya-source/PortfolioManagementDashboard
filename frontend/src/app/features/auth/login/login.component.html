@@ -1,0 +1,48 @@
+<div class="auth-page-container">
+  <div class="auth-card-wrapper">
+    <app-card title="Sign In" subtitle="Welcome back! Please login to your portfolio.">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+        
+        @if (errorMessage) {
+          <div class="error-alert animate-fade-in">
+            {{ errorMessage }}
+          </div>
+        }
+
+        <app-input
+          label="Email Address"
+          placeholder="e.g. investor@example.com"
+          type="email"
+          icon="email"
+          [control]="$any(loginForm.controls.email)"
+          formControlName="email"
+          errorMsg="Please enter a valid email address"
+        ></app-input>
+
+        <app-input
+          label="Password"
+          placeholder="••••••••"
+          type="password"
+          icon="lock"
+          [control]="$any(loginForm.controls.password)"
+          formControlName="password"
+          errorMsg="Password must be at least 6 characters"
+        ></app-input>
+
+        <div class="form-actions">
+          <app-button
+            type="submit"
+            variant="raised"
+            color="primary"
+            [loading]="loading"
+            label="Sign In"
+          ></app-button>
+        </div>
+
+        <div class="auth-footer">
+          <p>Don't have an account? <a routerLink="/auth/register">Create one here</a></p>
+        </div>
+      </form>
+    </app-card>
+  </div>
+</div>

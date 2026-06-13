@@ -1,0 +1,64 @@
+<div class="auth-page-container">
+  <div class="auth-card-wrapper">
+    <app-card title="Create Account" subtitle="Register a new account to start managing assets.">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+        
+        @if (errorMessage) {
+          <div class="error-alert animate-fade-in">
+            {{ errorMessage }}
+          </div>
+        }
+
+        @if (successMessage) {
+          <div class="success-alert animate-fade-in">
+            {{ successMessage }}
+          </div>
+        }
+
+        <app-input
+          label="Email Address"
+          placeholder="e.g. investor@example.com"
+          type="email"
+          icon="email"
+          [control]="$any(registerForm.controls.email)"
+          formControlName="email"
+          errorMsg="Please enter a valid email address"
+        ></app-input>
+
+        <app-input
+          label="Password"
+          placeholder="Min 6 characters"
+          type="password"
+          icon="lock"
+          [control]="$any(registerForm.controls.password)"
+          formControlName="password"
+          errorMsg="Password must be at least 6 characters"
+        ></app-input>
+
+        <app-input
+          label="Confirm Password"
+          placeholder="Re-enter password"
+          type="password"
+          icon="lock"
+          [control]="$any(registerForm.controls.confirmPassword)"
+          formControlName="confirmPassword"
+          [errorMsg]="registerForm.hasError('mismatch') && registerForm.controls.confirmPassword.touched ? 'Passwords must match' : ''"
+        ></app-input>
+
+        <div class="form-actions">
+          <app-button
+            type="submit"
+            variant="raised"
+            color="primary"
+            [loading]="loading"
+            label="Register"
+          ></app-button>
+        </div>
+
+        <div class="auth-footer">
+          <p>Already have an account? <a routerLink="/auth/login">Sign in here</a></p>
+        </div>
+      </form>
+    </app-card>
+  </div>
+</div>
