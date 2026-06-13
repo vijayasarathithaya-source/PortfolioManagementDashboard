@@ -98,7 +98,7 @@ To build and spin up the frontend and backend containers:
 ```bash
 docker-compose up --build -d backend frontend
 ```
-- **Frontend App**: Accessible at `http://localhost` (served by Nginx on port 80).
+- **Frontend App**: Accessible at `http://localhost:4000` (served by Nginx on port 4000).
 - **Backend API**: Accessible at `http://localhost:3000`.
 - **API Swagger docs**: Accessible at `http://localhost:3000/api-docs/`.
 
@@ -107,7 +107,7 @@ To spin up the environment and execute the complete test suites inside a Playwri
 ```bash
 docker-compose run --rm tests
 ```
-This automatically waits for the backend to be healthy, verifies the frontend is running, and executes the 25 API tests and 12 UI browser tests headlessly.
+This automatically waits for the backend to be healthy, verifies the frontend is running on port 4000, and executes the 25 API tests and 12 UI browser tests headlessly.
 
 ---
 

@@ -11,6 +11,6 @@ RUN npx playwright install chromium
 COPY . .
 
 ENV BACKEND_URL=http://backend:3000
-ENV FRONTEND_URL=http://frontend:80
+ENV FRONTEND_URL=http://frontend:4000
 
 CMD ["npm", "test"]

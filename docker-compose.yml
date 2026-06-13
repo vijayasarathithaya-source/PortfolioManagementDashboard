@@ -12,7 +12,7 @@ services:
       - DB_PATH=./database.sqlite
       - JWT_PRIVATE_KEY_PATH=./keys/private.pem
       - JWT_PUBLIC_KEY_PATH=./keys/public.pem
-      - CORS_ORIGIN=http://localhost,http://localhost:80,http://localhost:4200
+      - CORS_ORIGIN=http://localhost,http://localhost:80,http://localhost:4200,http://localhost:4000
     healthcheck:
       test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api-docs/"]
       interval: 5s
@@ -24,7 +24,7 @@ services:
       context: ./frontend
       dockerfile: Dockerfile
     ports:
-      - "80:80"
+      - "4000:4000"
     depends_on:
       - backend
 
@@ -34,7 +34,7 @@ services:
       dockerfile: Dockerfile
     environment:
       - BACKEND_URL=http://backend:3000
-      - FRONTEND_URL=http://frontend:80
+      - FRONTEND_URL=http://frontend:4000
     depends_on:
       backend:
         condition: service_healthy
