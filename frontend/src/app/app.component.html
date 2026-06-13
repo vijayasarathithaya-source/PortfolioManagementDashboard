@@ -1,24 +1,29 @@
 @if (isAuthenticated()) {
-<div class="app-layout">
+<div class="app-layout" [class.sidebar-collapsed]="sidebarCollapsed()">
   <!-- Desktop Left Sidebar -->
-  <aside class="desktop-sidebar">
+  <aside class="desktop-sidebar" [class.collapsed]="sidebarCollapsed()">
     <div class="sidebar-header">
-      <span class="material-icons brand-icon">donut_large</span>
-      <h1 class="brand-title">Portfolio</h1>
+      <div class="brand-info">
+        <span class="material-icons brand-icon">donut_large</span>
+        <span class="brand-title">Portfolio</span>
+      </div>
+      <button class="sidebar-toggle-btn" (click)="toggleSidebar()" title="Toggle Sidebar">
+        <span class="material-icons">{{ sidebarCollapsed() ? 'menu_open' : 'menu' }}</span>
+      </button>
     </div>
 
     <nav class="sidebar-nav">
-      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item" title="Dashboard">
         <span class="material-icons">dashboard</span>
-        <span>Dashboard</span>
+        <span class="nav-text">Dashboard</span>
       </a>
-      <a routerLink="/portfolio" routerLinkActive="active" class="nav-item">
+      <a routerLink="/portfolio" routerLinkActive="active" class="nav-item" title="Holdings">
         <span class="material-icons">account_balance_wallet</span>
-        <span>Holdings</span>
+        <span class="nav-text">Holdings</span>
       </a>
-      <a routerLink="/transactions" routerLinkActive="active" class="nav-item">
+      <a routerLink="/transactions" routerLinkActive="active" class="nav-item" title="Transactions">
         <span class="material-icons">history</span>
-        <span>Transactions</span>
+        <span class="nav-text">Transactions</span>
       </a>
     </nav>
 
@@ -31,13 +36,13 @@
       </div>
       <button (click)="logout()" class="logout-btn" title="Sign Out">
         <span class="material-icons">logout</span>
-        <span>Sign Out</span>
+        <span class="logout-text">Sign Out</span>
       </button>
     </div>
   </aside>
 
   <!-- Main Content Area -->
-  <div class="main-content-wrapper">
+  <div class="main-content-wrapper" [class.collapsed]="sidebarCollapsed()">
     <!-- Desktop/Tablet Top Header (Hidden on Mobile) -->
     <header class="top-header">
       <div class="header-left">

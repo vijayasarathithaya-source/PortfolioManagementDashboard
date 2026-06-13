@@ -62,8 +62,8 @@
   align-items: flex-start;
   gap: 16px;
   background-color: var(--color-danger-light);
-  border: 1px solid #fca5a5;
-  color: #b91c1c;
+  border: 1px solid var(--color-danger);
+  color: var(--color-danger);
   padding: 20px;
   border-radius: var(--radius-lg);
   margin-top: 24px;
@@ -76,11 +76,12 @@
     h3 {
       font-size: 16px;
       margin-bottom: 4px;
-      color: #991b1b;
+      color: var(--color-danger);
     }
     p {
       font-size: 14px;
       margin: 0;
+      color: var(--text-primary);
     }
   }
 }

@@ -2,12 +2,12 @@
 
 @include mat.core();
 
-// Modern M2-based Color Palette with m2- prefixes
-$primary-palette: mat.m2-define-palette(mat.$m2-indigo-palette, 600, 300, 800);
+// Premium Deep Sea Color Palette (Cyan primary, Teal accent)
+$primary-palette: mat.m2-define-palette(mat.$m2-cyan-palette, 700, 400, 900);
 $accent-palette: mat.m2-define-palette(mat.$m2-teal-palette, A400, A200, A700);
 $warn-palette: mat.m2-define-palette(mat.$m2-red-palette, 600);
 
-$theme: mat.m2-define-light-theme((
+$theme: mat.m2-define-dark-theme((
   color: (
     primary: $primary-palette,
     accent: $accent-palette,
@@ -17,37 +17,42 @@ $theme: mat.m2-define-light-theme((
 
 @include mat.all-component-themes($theme);
 
-// CSS variables for Premium Aesthetics
+// CSS variables for Premium Aesthetics - Deep Sea Dark Theme
 :root {
   --font-display: 'Outfit', sans-serif;
   --font-body: 'Inter', sans-serif;
 
-  // Curated Colors
-  --bg-app: #f8fafc;
-  --bg-card: #ffffff;
-  --text-primary: #0f172a;
-  --text-secondary: #475569;
-  --text-muted: #94a3b8;
+  // Curated Deep Sea Dark Colors
+  --bg-app: #060b13;          // Abyssal black-blue
+  --bg-card: #0b1424;         // Deep ocean navy card
+  --text-primary: #f8fafc;    // Soft foam white
+  --text-secondary: #94a3b8;  // Sea-mist gray
+  --text-muted: #475569;      // Under-water shadow gray
 
-  --color-primary: #4f46e5;
-  --color-primary-light: #e0e7ff;
-  --color-accent: #0d9488;
-  --color-accent-light: #ccfbf1;
+  --color-primary: #00f2fe;   // Bioluminescent electric cyan
+  --color-primary-light: rgba(0, 242, 254, 0.12);
+  --color-accent: #00b4d8;    // Shallow sea blue
+  --color-accent-light: rgba(0, 180, 216, 0.1);
   --color-success: #10b981;
-  --color-success-light: #d1fae5;
-  --color-danger: #ef4444;
-  --color-danger-light: #fee2e2;
-  --color-warning: #f59e0b;
-  --color-warning-light: #fef3c7;
+  --color-success-light: rgba(16, 185, 129, 0.1);
+  --color-danger: #f87171;    // Coral red
+  --color-danger-light: rgba(248, 113, 113, 0.1);
+  --color-warning: #fbbf24;
+  --color-warning-light: rgba(251, 191, 36, 0.1);
 
-  // Shadows
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --shadow-premium: 0 20px 25px -5px rgb(0 0 0 / 0.05), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+  // Hover & Scroll Colors
+  --bg-hover: rgba(255, 255, 255, 0.05);
+  --bg-skeleton-start: rgba(255, 255, 255, 0.04);
+  --bg-skeleton-middle: rgba(255, 255, 255, 0.09);
+
+  // Shadows (with darker tones for high contrast on dark screens)
+  --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.3);
+  --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -2px rgba(0, 0, 0, 0.4);
+  --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.5);
+  --shadow-premium: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 8px 10px -6px rgba(0, 0, 0, 0.6);
 
   // Borders & Radius
-  --border-color: #e2e8f0;
+  --border-color: #172a45;    // Deep water seam border
   --radius-sm: 8px;
   --radius-md: 12px;
   --radius-lg: 16px;

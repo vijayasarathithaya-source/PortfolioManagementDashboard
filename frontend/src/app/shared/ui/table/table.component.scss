@@ -25,7 +25,7 @@
     letter-spacing: 0.05em;
     color: var(--text-secondary);
     padding: 16px 20px;
-    background-color: #f8fafc;
+    background-color: var(--bg-app);
     border-bottom: 2px solid var(--border-color);
   }
 
@@ -44,7 +44,7 @@
   cursor: pointer;
 
   &:hover {
-    background-color: #f1f5f9;
+    background-color: var(--bg-hover);
   }
 }
 
@@ -117,20 +117,21 @@
 
   &.buy {
     background-color: var(--color-primary);
-    color: white;
+    color: var(--bg-app);
 
     &:hover {
-      background-color: #3b82f6;
+      background-color: var(--color-accent);
+      color: var(--text-primary);
     }
   }
 
   &.sell {
-    background-color: #f3f4f6;
+    background-color: var(--border-color);
     color: var(--text-primary);
     border: 1px solid var(--border-color);
 
     &:hover {
-      background-color: var(--color-danger-light);
+      background-color: var(--bg-hover);
       color: var(--color-danger);
       border-color: var(--color-danger);
     }
@@ -171,7 +172,7 @@
     gap: 12px;
 
     &:hover, &:active {
-      background-color: #f8fafc;
+      background-color: var(--bg-hover);
     }
 
     &:last-child {
