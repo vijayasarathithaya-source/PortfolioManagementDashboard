@@ -1,0 +1,23 @@
+<mat-form-field appearance="outline" class="app-datepicker-field">
+  @if (label()) {
+    <mat-label>{{ label() }}</mat-label>
+  }
+  
+  <input
+    matInput
+    [matDatepicker]="picker"
+    [placeholder]="placeholder()"
+    [value]="value"
+    [disabled]="disabled"
+    (dateChange)="onDateChange($event.value)"
+    (blur)="onTouched()"
+  />
+  <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+  <mat-datepicker #picker></mat-datepicker>
+
+  @if (errorMsg() || (control() && control().invalid && control().touched)) {
+    <mat-error>
+      {{ errorMsg() || 'Please select a valid date' }}
+    </mat-error>
+  }
+</mat-form-field>

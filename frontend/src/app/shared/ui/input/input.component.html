@@ -1,0 +1,27 @@
+<mat-form-field appearance="outline" class="app-input-field">
+  @if (label()) {
+    <mat-label>{{ label() }}</mat-label>
+  }
+  
+  @if (icon()) {
+    <mat-icon matPrefix class="input-prefix-icon">{{ icon() }}</mat-icon>
+  }
+
+  <input
+    matInput
+    [type]="type()"
+    [placeholder]="placeholder()"
+    [formControl]="control()"
+    (blur)="onTouched()"
+  />
+
+  @if (hint()) {
+    <mat-hint>{{ hint() }}</mat-hint>
+  }
+
+  @if (errorMsg() || (control() && control().invalid && control().touched)) {
+    <mat-error>
+      {{ errorMsg() || 'This field is required or invalid' }}
+    </mat-error>
+  }
+</mat-form-field>
