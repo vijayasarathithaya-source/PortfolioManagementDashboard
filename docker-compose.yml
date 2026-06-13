@@ -1,0 +1,42 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+    environment:
+      - PORT=3000
+      - DB_PATH=./database.sqlite
+      - JWT_PRIVATE_KEY_PATH=./keys/private.pem
+      - JWT_PUBLIC_KEY_PATH=./keys/public.pem
+      - CORS_ORIGIN=http://localhost,http://localhost:80,http://localhost:4200
+    healthcheck:
+      test: ["CMD", "wget", "--spider", "-q", "http://localhost:3000/api-docs/"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+
+  tests:
+    build:
+      context: ./bdd-tests
+      dockerfile: Dockerfile
+    environment:
+      - BACKEND_URL=http://backend:3000
+      - FRONTEND_URL=http://frontend:80
+    depends_on:
+      backend:
+        condition: service_healthy
+      frontend:
+        condition: service_started
