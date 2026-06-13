@@ -1,6 +1,6 @@
 # AI Co-Creation Disclaimer
 
-This project, **Portfolio Management Dashboard**, was developed through a pair programming collaboration between the I (VIJAYA SARATHI) and an AI assistant (**Antigravity**, powered by Google Gemini). 
+This project, **Portfolio Management Dashboard**, was developed through a pair programming collaboration between  I (VIJAYA SARATHI) and an AI assistant (**Antigravity**, powered by Google Gemini). 
 
 ## Collaboration Details
 
