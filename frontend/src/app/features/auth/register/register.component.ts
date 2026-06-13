@@ -24,6 +24,7 @@ import { ButtonComponent } from '../../../shared/ui/button/button.component';
 export class RegisterComponent {
   registerForm = new FormGroup(
     {
+      fullName: new FormControl('', [Validators.required, Validators.minLength(2)]),
       email: new FormControl('', [Validators.required, Validators.email]),
       password: new FormControl('', [Validators.required, Validators.minLength(6)]),
       confirmPassword: new FormControl('', [Validators.required]),
@@ -57,9 +58,9 @@ export class RegisterComponent {
     this.loading.set(true);
     this.errorMessage.set('');
     this.successMessage.set('');
-    const { email, password } = this.registerForm.value;
+    const { email, fullName, password } = this.registerForm.value;
 
-    this.authService.register(email!, password!).subscribe({
+    this.authService.register(email!, fullName!, password!).subscribe({
       next: () => {
         this.loading.set(false);
         this.successMessage.set('Registration successful! Please login.');

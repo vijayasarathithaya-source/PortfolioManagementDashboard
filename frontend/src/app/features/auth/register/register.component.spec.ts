@@ -45,6 +45,7 @@ describe('RegisterComponent', () => {
 
   it('should validate passwords match', () => {
     component.registerForm.patchValue({
+      fullName: 'John Doe',
       email: 'test@example.com',
       password: 'password123',
       confirmPassword: 'differentpassword',
@@ -53,5 +54,16 @@ describe('RegisterComponent', () => {
 
     expect(component.registerForm.valid).toBeFalse();
     expect(component.registerForm.hasError('mismatch')).toBeTrue();
+  });
+
+  it('should validate form is valid when valid inputs are provided', () => {
+    component.registerForm.patchValue({
+      fullName: 'John Doe',
+      email: 'test@example.com',
+      password: 'password123',
+      confirmPassword: 'password123',
+    });
+
+    expect(component.registerForm.valid).toBeTrue();
   });
 });

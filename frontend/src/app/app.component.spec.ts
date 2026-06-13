@@ -47,12 +47,13 @@ describe('App', () => {
 
   it('should render sidebar brand when authenticated', () => {
     mockAuthService.isAuthenticated.set(true);
-    mockAuthService.userSignal.set({ email: 'investor@example.com' });
+    mockAuthService.userSignal.set({ email: 'investor@example.com', fullName: 'John Doe' });
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(compiled.querySelector('.brand-title')?.textContent).toContain('Portfolio');
+    expect(compiled.querySelector('.user-name')?.textContent).toContain('John Doe');
     expect(compiled.querySelector('.user-email')?.textContent).toContain('investor@example.com');
   });
 });

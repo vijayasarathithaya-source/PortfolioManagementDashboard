@@ -17,15 +17,19 @@ export function createAuthRouter(userRepository: IUserRepository): Router {
 
   router.post('/register', async (req, res, next) => {
     try {
-      const { email, password } = req.body;
+      const { email, fullName, password } = req.body;
 
-      if (!email || !password) {
-        return res.status(400).json({ error: 'Email and password are required' });
+      if (!email || !fullName || !password) {
+        return res.status(400).json({ error: 'Email, full name, and password are required' });
       }
 
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       if (!emailRegex.test(email)) {
         return res.status(400).json({ error: 'Invalid email format' });
+      }
+
+      if (fullName.trim().length < 2) {
+        return res.status(400).json({ error: 'Full name must be at least 2 characters long' });
       }
 
       if (password.length < 6) {
@@ -38,12 +42,13 @@ export function createAuthRouter(userRepository: IUserRepository): Router {
       }
 
       const passwordHash = await bcrypt.hash(password, 10);
-      const user = await userRepository.create({ email, passwordHash });
+      const user = await userRepository.create({ email, fullName: fullName.trim(), passwordHash });
 
       res.status(201).json({
         user: {
           id: user.id,
           email: user.email,
+          fullName: user.fullName,
           createdAt: user.createdAt,
         },
         message: 'Registration successful',
@@ -92,6 +97,7 @@ export function createAuthRouter(userRepository: IUserRepository): Router {
         user: {
           id: user.id,
           email: user.email,
+          fullName: user.fullName,
           createdAt: user.createdAt,
         },
       });
@@ -119,6 +125,7 @@ export function createAuthRouter(userRepository: IUserRepository): Router {
       res.status(200).json({
         id: user.id,
         email: user.email,
+        fullName: user.fullName,
         createdAt: user.createdAt,
       });
     } catch (err) {

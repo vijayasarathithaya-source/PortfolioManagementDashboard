@@ -149,13 +149,22 @@
       overflow: hidden;
       transition: opacity 0.2s ease;
 
-      .user-email {
-        font-size: 13px;
+      .user-name {
+        font-size: 14px;
         color: var(--text-primary);
-        font-weight: 500;
+        font-weight: 600;
         white-space: nowrap;
         text-overflow: ellipsis;
         overflow: hidden;
+      }
+
+      .user-email {
+        font-size: 11px;
+        color: var(--text-secondary);
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        margin-top: 1px;
       }
     }
   }

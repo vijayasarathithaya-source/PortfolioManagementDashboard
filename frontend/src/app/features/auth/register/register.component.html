@@ -20,6 +20,17 @@
         }
 
         <app-input
+          label="Full Name"
+          placeholder="e.g. John Doe"
+          type="text"
+          icon="person"
+          [control]="$any(registerForm.controls.fullName)"
+          formControlName="fullName"
+          autocomplete="name"
+          errorMsg="Full name is required (min 2 characters)"
+        ></app-input>
+
+        <app-input
           label="Email Address"
           placeholder="e.g. investor@example.com"
           type="email"

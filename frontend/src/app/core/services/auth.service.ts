@@ -31,8 +31,8 @@ export class AuthService {
     }
   }
 
-  register(email: string, password: string): Observable<any> {
-    return this.api.post<any>('/api/auth/register', { email, password });
+  register(email: string, fullName: string, password: string): Observable<any> {
+    return this.api.post<any>('/api/auth/register', { email, fullName, password });
   }
 
   login(email: string, password: string): Observable<AuthResponse> {
@@ -42,6 +42,7 @@ export class AuthService {
         const mappedUser: User = {
           id: res.user.id,
           email: res.user.email,
+          fullName: res.user.fullName,
           createdAt: new Date(res.user.createdAt),
         };
         this.userSignal.set(mappedUser);

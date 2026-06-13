@@ -31,6 +31,7 @@
       <div class="user-profile">
         <span class="material-icons avatar">account_circle</span>
         <div class="user-details">
+          <span class="user-name" [title]="currentUser()?.fullName">{{ currentUser()?.fullName || 'Investor' }}</span>
           <span class="user-email" [title]="currentUser()?.email">{{ currentUser()?.email }}</span>
         </div>
       </div>
@@ -46,7 +47,7 @@
     <!-- Desktop/Tablet Top Header (Hidden on Mobile) -->
     <header class="top-header">
       <div class="header-left">
-        <span class="welcome-text">Welcome back, investor</span>
+        <span class="welcome-text">Welcome back, {{ currentUser()?.fullName || 'investor' }}</span>
       </div>
       <div class="header-right">
         <span class="date-badge">{{ todayDate }}</span>
@@ -61,8 +62,8 @@
       </div>
       <div class="header-right">
         @if (currentUser()) {
-          <div class="user-avatar" [title]="currentUser()?.email">
-            {{ currentUser()?.email?.charAt(0)?.toUpperCase() }}
+          <div class="user-avatar" [title]="currentUser()?.fullName || currentUser()?.email">
+            {{ (currentUser()?.fullName || currentUser()?.email)?.charAt(0)?.toUpperCase() }}
           </div>
         }
       </div>

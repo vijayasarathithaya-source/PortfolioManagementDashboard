@@ -17,6 +17,7 @@ export async function bootstrapDatabase(dbPath: string): Promise<Database> {
     CREATE TABLE IF NOT EXISTS users (
       id TEXT PRIMARY KEY,
       email TEXT UNIQUE NOT NULL,
+      fullName TEXT NOT NULL,
       passwordHash TEXT NOT NULL,
       createdAt TEXT NOT NULL
     );

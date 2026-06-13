@@ -27,12 +27,14 @@ describe('SQLite Repositories (TDD)', () => {
     it('should insert a user and find them by email and id', async () => {
       const userPayload = {
         email: 'test@example.com',
+        fullName: 'Test Investor',
         passwordHash: 'hashedpass',
       };
 
       const created = await userRepository.create(userPayload);
       expect(created).toHaveProperty('id');
       expect(created.email).toBe(userPayload.email);
+      expect(created.fullName).toBe(userPayload.fullName);
 
       const foundByEmail = await userRepository.findByEmail(userPayload.email);
       expect(foundByEmail).not.toBeNull();
@@ -50,8 +52,8 @@ describe('SQLite Repositories (TDD)', () => {
 
     beforeEach(async () => {
       // Seed user and reference asset
-      await db.run('INSERT INTO users (id, email, passwordHash, createdAt) VALUES (?, ?, ?, ?)', [
-        userId, 'user@example.com', 'hash', new Date().toISOString()
+      await db.run('INSERT INTO users (id, email, fullName, passwordHash, createdAt) VALUES (?, ?, ?, ?, ?)', [
+        userId, 'user@example.com', 'Test User', 'hash', new Date().toISOString()
       ]);
       await db.run('INSERT INTO assets (id, symbol, name, assetType, currentPrice, updatedAt) VALUES (?, ?, ?, ?, ?, ?)', [
         assetId, 'AAPL_TEST', 'Apple Inc.', 'Stocks', 170.00, new Date().toISOString()
@@ -109,8 +111,8 @@ describe('SQLite Repositories (TDD)', () => {
 
     beforeEach(async () => {
       // Seed user, asset, and investment
-      await db.run('INSERT INTO users (id, email, passwordHash, createdAt) VALUES (?, ?, ?, ?)', [
-        userId, 'user@example.com', 'hash', new Date().toISOString()
+      await db.run('INSERT INTO users (id, email, fullName, passwordHash, createdAt) VALUES (?, ?, ?, ?, ?)', [
+        userId, 'user@example.com', 'Test User', 'hash', new Date().toISOString()
       ]);
       await db.run('INSERT INTO assets (id, symbol, name, assetType, currentPrice, updatedAt) VALUES (?, ?, ?, ?, ?, ?)', [
         assetId, 'AAPL_TEST', 'Apple Inc.', 'Stocks', 170.00, new Date().toISOString()

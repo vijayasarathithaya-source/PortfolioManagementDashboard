@@ -52,15 +52,17 @@ describe('Auth Controller (TDD)', () => {
   describe('POST /api/auth/register', () => {
     const validRegisterPayload = {
       email: 'investor@example.com',
+      fullName: 'John Doe',
       password: 'password123',
     };
 
-    it('should successfully register a user when valid email and password are provided', async () => {
+    it('should successfully register a user when valid email, fullName and password are provided', async () => {
       mockUserRepository.findByEmail.mockResolvedValue(null);
       
       const createdUser: User = {
         id: 'user-uuid-123',
         email: validRegisterPayload.email,
+        fullName: validRegisterPayload.fullName,
         passwordHash: 'hashedpassword',
         createdAt: new Date(),
       };
@@ -75,6 +77,7 @@ describe('Auth Controller (TDD)', () => {
       expect(response.body).toHaveProperty('user');
       expect(response.body.user).toHaveProperty('id');
       expect(response.body.user.email).toBe(validRegisterPayload.email);
+      expect(response.body.user.fullName).toBe(validRegisterPayload.fullName);
       expect(response.body.user).not.toHaveProperty('passwordHash');
       expect(response.body).toHaveProperty('message', 'Registration successful');
     });
@@ -83,6 +86,7 @@ describe('Auth Controller (TDD)', () => {
       const existingUser: User = {
         id: 'user-uuid-existing',
         email: validRegisterPayload.email,
+        fullName: 'John Doe',
         passwordHash: 'hashedpassword',
         createdAt: new Date(),
       };
@@ -99,7 +103,16 @@ describe('Auth Controller (TDD)', () => {
     it('should fail registration if email format is invalid', async () => {
       const response = await request(app)
         .post('/api/auth/register')
-        .send({ email: 'invalid-email', password: 'password123' });
+        .send({ email: 'invalid-email', fullName: 'John Doe', password: 'password123' });
+
+      expect(response.status).toBe(400); // Bad Request
+      expect(response.body).toHaveProperty('error');
+    });
+
+    it('should fail registration if fullName is missing or too short', async () => {
+      const response = await request(app)
+        .post('/api/auth/register')
+        .send({ email: 'investor@example.com', fullName: 'A', password: 'password123' });
 
       expect(response.status).toBe(400); // Bad Request
       expect(response.body).toHaveProperty('error');
@@ -108,7 +121,7 @@ describe('Auth Controller (TDD)', () => {
     it('should fail registration if password is too short', async () => {
       const response = await request(app)
         .post('/api/auth/register')
-        .send({ email: 'investor@example.com', password: '123' });
+        .send({ email: 'investor@example.com', fullName: 'John Doe', password: '123' });
 
       expect(response.status).toBe(400); // Bad Request
       expect(response.body).toHaveProperty('error');
@@ -125,6 +138,7 @@ describe('Auth Controller (TDD)', () => {
       const dbUser: User = {
         id: 'user-uuid-123',
         email: validLoginPayload.email,
+        fullName: 'John Doe',
         passwordHash: 'hashedpassword', // Assume mocked hashing resolves correctly
         createdAt: new Date(),
       };
@@ -139,6 +153,7 @@ describe('Auth Controller (TDD)', () => {
       expect(response.body).toHaveProperty('token');
       expect(response.body).toHaveProperty('user');
       expect(response.body.user.email).toBe(validLoginPayload.email);
+      expect(response.body.user.fullName).toBe('John Doe');
     });
 
     it('should fail log in with incorrect credentials', async () => {
@@ -178,6 +193,7 @@ describe('Auth Controller (TDD)', () => {
       const dbUser: User = {
         id: 'user-uuid-123',
         email: 'investor@example.com',
+        fullName: 'John Doe',
         passwordHash: 'hashedpassword',
         createdAt: new Date(),
       };
@@ -190,6 +206,7 @@ describe('Auth Controller (TDD)', () => {
       expect(response.status).toBe(200);
       expect(response.body).toHaveProperty('id', 'user-uuid-123');
       expect(response.body).toHaveProperty('email', 'investor@example.com');
+      expect(response.body).toHaveProperty('fullName', 'John Doe');
       expect(response.body).not.toHaveProperty('passwordHash');
     });
 

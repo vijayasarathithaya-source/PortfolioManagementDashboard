@@ -12,6 +12,7 @@ export class SqliteUserRepository implements IUserRepository {
     return {
       id: row.id,
       email: row.email,
+      fullName: row.fullName,
       passwordHash: row.passwordHash,
       createdAt: new Date(row.createdAt),
     };
@@ -23,6 +24,7 @@ export class SqliteUserRepository implements IUserRepository {
     return {
       id: row.id,
       email: row.email,
+      fullName: row.fullName,
       passwordHash: row.passwordHash,
       createdAt: new Date(row.createdAt),
     };
@@ -32,15 +34,17 @@ export class SqliteUserRepository implements IUserRepository {
     const id = randomUUID();
     const createdAt = new Date();
     await this.db.run(
-      'INSERT INTO users (id, email, passwordHash, createdAt) VALUES (?, ?, ?, ?)',
+      'INSERT INTO users (id, email, fullName, passwordHash, createdAt) VALUES (?, ?, ?, ?, ?)',
       id,
       user.email,
+      user.fullName,
       user.passwordHash,
       createdAt.toISOString()
     );
     return {
       id,
       email: user.email,
+      fullName: user.fullName,
       passwordHash: user.passwordHash,
       createdAt,
     };
