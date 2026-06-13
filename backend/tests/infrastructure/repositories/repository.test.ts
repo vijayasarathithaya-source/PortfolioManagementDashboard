@@ -1,9 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import sqlite3 from 'sqlite3';
-import { open } from 'sqlite';
-import type { Database } from 'sqlite';
+import { bootstrapDatabase } from '../../../src/infrastructure/database/bootstrap.js';
 import { SqliteUserRepository, SqliteInvestmentRepository, SqliteTransactionRepository } from '../../../src/infrastructure/repositories/sqlite.repository.js';
 import type { User, Investment, Transaction } from '../../../src/domain/entities.js';
+import type { Database } from 'sqlite';
 
 describe('SQLite Repositories (TDD)', () => {
   let db: Database;
@@ -12,43 +11,8 @@ describe('SQLite Repositories (TDD)', () => {
   let transactionRepository: SqliteTransactionRepository;
 
   beforeEach(async () => {
-    // Open in-memory SQLite database
-    db = await open({
-      filename: ':memory:',
-      driver: sqlite3.Database
-    });
-
-    // Create Tables based on BRD design
-    await db.exec(`
-      CREATE TABLE users (
-        id TEXT PRIMARY KEY,
-        email TEXT UNIQUE NOT NULL,
-        passwordHash TEXT NOT NULL,
-        createdAt TEXT NOT NULL
-      );
-
-      CREATE TABLE investments (
-        id TEXT PRIMARY KEY,
-        userId TEXT NOT NULL,
-        assetName TEXT NOT NULL,
-        assetType TEXT NOT NULL,
-        quantity REAL NOT NULL,
-        purchasePrice REAL NOT NULL,
-        currentValue REAL NOT NULL,
-        purchaseDate TEXT NOT NULL,
-        FOREIGN KEY(userId) REFERENCES users(id)
-      );
-
-      CREATE TABLE transactions (
-        id TEXT PRIMARY KEY,
-        investmentId TEXT NOT NULL,
-        transactionType TEXT NOT NULL,
-        quantity REAL NOT NULL,
-        price REAL NOT NULL,
-        transactionDate TEXT NOT NULL,
-        FOREIGN KEY(investmentId) REFERENCES investments(id)
-      );
-    `);
+    // Open and bootstrap in-memory SQLite database
+    db = await bootstrapDatabase(':memory:');
 
     userRepository = new SqliteUserRepository(db);
     investmentRepository = new SqliteInvestmentRepository(db);
@@ -82,28 +46,30 @@ describe('SQLite Repositories (TDD)', () => {
 
   describe('SqliteInvestmentRepository', () => {
     const userId = 'user-uuid-123';
+    const assetId = 'asset-uuid-1';
 
     beforeEach(async () => {
-      // Insert mock user to satisfy foreign keys if verified, but SQLite in-memory FK is off by default unless enabled
+      // Seed user and reference asset
       await db.run('INSERT INTO users (id, email, passwordHash, createdAt) VALUES (?, ?, ?, ?)', [
         userId, 'user@example.com', 'hash', new Date().toISOString()
+      ]);
+      await db.run('INSERT INTO assets (id, symbol, name, assetType, currentPrice, updatedAt) VALUES (?, ?, ?, ?, ?, ?)', [
+        assetId, 'AAPL', 'Apple Inc.', 'Stocks', 170.00, new Date().toISOString()
       ]);
     });
 
     it('should create and retrieve investments for a user', async () => {
       const investmentPayload = {
         userId,
-        assetName: 'Apple Inc.',
-        assetType: 'Stocks' as const,
+        assetId,
         quantity: 10,
         purchasePrice: 150,
-        currentValue: 170,
         purchaseDate: new Date(),
       };
 
       const created = await investmentRepository.create(investmentPayload);
       expect(created).toHaveProperty('id');
-      expect(created.assetName).toBe('Apple Inc.');
+      expect(created.assetId).toBe(assetId);
 
       const found = await investmentRepository.findByUserId(userId);
       expect(found).toHaveLength(1);
@@ -113,11 +79,9 @@ describe('SQLite Repositories (TDD)', () => {
     it('should update and delete an investment', async () => {
       const investmentPayload = {
         userId,
-        assetName: 'Microsoft',
-        assetType: 'Stocks' as const,
+        assetId,
         quantity: 10,
         purchasePrice: 200,
-        currentValue: 210,
         purchaseDate: new Date(),
       };
 
@@ -125,10 +89,10 @@ describe('SQLite Repositories (TDD)', () => {
       
       const updated = await investmentRepository.update(created.id, {
         quantity: 12,
-        currentValue: 220
+        purchasePrice: 210
       });
       expect(updated.quantity).toBe(12);
-      expect(updated.currentValue).toBe(220);
+      expect(updated.purchasePrice).toBe(210);
 
       const deleted = await investmentRepository.delete(created.id);
       expect(deleted).toBe(true);
@@ -141,14 +105,18 @@ describe('SQLite Repositories (TDD)', () => {
   describe('SqliteTransactionRepository', () => {
     const investmentId = 'investment-uuid-1';
     const userId = 'user-uuid-123';
+    const assetId = 'asset-uuid-1';
 
     beforeEach(async () => {
-      // Seed user and investment
+      // Seed user, asset, and investment
       await db.run('INSERT INTO users (id, email, passwordHash, createdAt) VALUES (?, ?, ?, ?)', [
         userId, 'user@example.com', 'hash', new Date().toISOString()
       ]);
-      await db.run('INSERT INTO investments (id, userId, assetName, assetType, quantity, purchasePrice, currentValue, purchaseDate) VALUES (?, ?, ?, ?, ?, ?, ?, ?)', [
-        investmentId, userId, 'Apple Inc.', 'Stocks', 10, 150, 170, new Date().toISOString()
+      await db.run('INSERT INTO assets (id, symbol, name, assetType, currentPrice, updatedAt) VALUES (?, ?, ?, ?, ?, ?)', [
+        assetId, 'AAPL', 'Apple Inc.', 'Stocks', 170.00, new Date().toISOString()
+      ]);
+      await db.run('INSERT INTO investments (id, userId, assetId, quantity, purchasePrice, purchaseDate) VALUES (?, ?, ?, ?, ?, ?)', [
+        investmentId, userId, assetId, 10, 150, new Date().toISOString()
       ]);
     });
 

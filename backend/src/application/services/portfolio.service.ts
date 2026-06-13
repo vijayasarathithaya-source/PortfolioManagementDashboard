@@ -1,4 +1,4 @@
-import type { IInvestmentRepository } from '../../domain/repositories/interfaces.js';
+import type { IInvestmentRepository, IAssetRepository } from '../../domain/repositories/interfaces.js';
 
 export interface PortfolioSummary {
   totalValue: number;
@@ -9,7 +9,10 @@ export interface PortfolioSummary {
 }
 
 export class PortfolioService {
-  constructor(private investmentRepository: IInvestmentRepository) {}
+  constructor(
+    private investmentRepository: IInvestmentRepository,
+    private assetRepository: IAssetRepository
+  ) {}
 
   async getSummary(userId: string): Promise<PortfolioSummary> {
     // Stub implementation for TDD: throws Error

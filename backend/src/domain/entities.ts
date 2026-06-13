@@ -7,14 +7,21 @@ export interface User {
 
 export type AssetType = 'Stocks' | 'Bonds' | 'Mutual Funds';
 
+export interface Asset {
+  id: string;
+  symbol: string;
+  name: string;
+  assetType: AssetType;
+  currentPrice: number;
+  updatedAt: Date;
+}
+
 export interface Investment {
   id: string;
   userId: string;
-  assetName: string;
-  assetType: AssetType;
+  assetId: string;
   quantity: number;
   purchasePrice: number;
-  currentValue: number;
   purchaseDate: Date;
 }
 

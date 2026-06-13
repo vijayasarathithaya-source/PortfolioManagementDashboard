@@ -34,11 +34,9 @@ describe('Transaction Service (TDD)', () => {
       const mockInvestment: Investment = {
         id: 'investment-1',
         userId: userId,
-        assetName: 'Apple Inc.',
-        assetType: 'Stocks',
+        assetId: 'asset-uuid-1',
         quantity: 10,
         purchasePrice: 150,
-        currentValue: 170,
         purchaseDate: new Date(),
       };
 
@@ -73,11 +71,9 @@ describe('Transaction Service (TDD)', () => {
       const mockInvestment: Investment = {
         id: 'investment-1',
         userId: userId,
-        assetName: 'Apple Inc.',
-        assetType: 'Stocks',
+        assetId: 'asset-uuid-1',
         quantity: 10,
         purchasePrice: 150,
-        currentValue: 170,
         purchaseDate: new Date(),
       };
 
@@ -112,11 +108,9 @@ describe('Transaction Service (TDD)', () => {
       const otherUserInvestment: Investment = {
         id: 'investment-1',
         userId: 'some-other-user-uuid',
-        assetName: 'Apple Inc.',
-        assetType: 'Stocks',
+        assetId: 'asset-uuid-1',
         quantity: 10,
         purchasePrice: 150,
-        currentValue: 170,
         purchaseDate: new Date(),
       };
 
@@ -138,11 +132,9 @@ describe('Transaction Service (TDD)', () => {
       const mockInvestment: Investment = {
         id: 'investment-1',
         userId: userId,
-        assetName: 'Apple Inc.',
-        assetType: 'Stocks',
+        assetId: 'asset-uuid-1',
         quantity: 10,
         purchasePrice: 150,
-        currentValue: 170,
         purchaseDate: new Date(),
       };
 

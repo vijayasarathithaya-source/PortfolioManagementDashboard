@@ -2,11 +2,12 @@ import { jest, describe, it, expect, beforeEach } from '@jest/globals';
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
 import { createApp } from '../../../src/app.js';
-import type { IUserRepository, IInvestmentRepository, ITransactionRepository } from '../../../src/domain/repositories/interfaces.js';
+import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from '../../../src/domain/repositories/interfaces.js';
 import type { Investment } from '../../../src/domain/entities.js';
 
 describe('Investment Controller (TDD)', () => {
   let mockUserRepository: jest.Mocked<IUserRepository>;
+  let mockAssetRepository: jest.Mocked<IAssetRepository>;
   let mockInvestmentRepository: jest.Mocked<IInvestmentRepository>;
   let mockTransactionRepository: jest.Mocked<ITransactionRepository>;
   let app: any;
@@ -27,6 +28,14 @@ describe('Investment Controller (TDD)', () => {
       create: jest.fn(),
     };
 
+    mockAssetRepository = {
+      findById: jest.fn(),
+      findBySymbol: jest.fn(),
+      findAll: jest.fn(),
+      create: jest.fn(),
+      updatePrice: jest.fn(),
+    };
+
     mockInvestmentRepository = {
       findById: jest.fn(),
       findByUserId: jest.fn(),
@@ -44,6 +53,7 @@ describe('Investment Controller (TDD)', () => {
 
     app = createApp({
       userRepository: mockUserRepository,
+      assetRepository: mockAssetRepository,
       investmentRepository: mockInvestmentRepository,
       transactionRepository: mockTransactionRepository,
     });
@@ -58,11 +68,9 @@ describe('Investment Controller (TDD)', () => {
 
   describe('POST /api/investments', () => {
     const validPayload = {
-      assetName: 'Apple Inc.',
-      assetType: 'Stocks',
+      assetId: 'asset-uuid-1',
       quantity: 10,
       purchasePrice: 150.50,
-      currentValue: 175.00,
       purchaseDate: '2026-01-15'
     };
 
@@ -70,11 +78,9 @@ describe('Investment Controller (TDD)', () => {
       const mockCreatedInvestment: Investment = {
         id: 'investment-uuid-1',
         userId: userId,
-        assetName: validPayload.assetName,
-        assetType: 'Stocks',
+        assetId: validPayload.assetId,
         quantity: validPayload.quantity,
         purchasePrice: validPayload.purchasePrice,
-        currentValue: validPayload.currentValue,
         purchaseDate: new Date(validPayload.purchaseDate)
       };
 
@@ -87,28 +93,18 @@ describe('Investment Controller (TDD)', () => {
 
       expect(response.status).toBe(201);
       expect(response.body).toHaveProperty('id', 'investment-uuid-1');
-      expect(response.body.assetName).toBe(validPayload.assetName);
+      expect(response.body.assetId).toBe(validPayload.assetId);
       expect(mockInvestmentRepository.create).toHaveBeenCalled();
     });
 
-    it('should return 400 if assetName is missing', async () => {
+    it('should return 400 if assetId is missing', async () => {
       const response = await request(app)
         .post('/api/investments')
         .set('Authorization', `Bearer ${authToken}`)
-        .send({ ...validPayload, assetName: '' });
+        .send({ ...validPayload, assetId: '' });
 
       expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty('error', expect.stringContaining('Asset name is mandatory'));
-    });
-
-    it('should return 400 if assetType is invalid', async () => {
-      const response = await request(app)
-        .post('/api/investments')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send({ ...validPayload, assetType: 'Crypto' });
-
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty('error', expect.stringContaining('Asset type must be Stocks, Bonds, or Mutual Funds'));
+      expect(response.body).toHaveProperty('error', expect.stringContaining('Asset ID is mandatory'));
     });
 
     it('should return 400 if quantity is zero or negative', async () => {
@@ -130,16 +126,6 @@ describe('Investment Controller (TDD)', () => {
       expect(response.status).toBe(400);
       expect(response.body).toHaveProperty('error', expect.stringContaining('Purchase price must be greater than zero'));
     });
-
-    it('should return 400 if currentValue is zero or negative', async () => {
-      const response = await request(app)
-        .post('/api/investments')
-        .set('Authorization', `Bearer ${authToken}`)
-        .send({ ...validPayload, currentValue: 0 });
-
-      expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty('error', expect.stringContaining('Current value must be greater than zero'));
-    });
   });
 
   describe('GET /api/investments', () => {
@@ -148,21 +134,17 @@ describe('Investment Controller (TDD)', () => {
         {
           id: 'investment-1',
           userId: userId,
-          assetName: 'Apple Inc.',
-          assetType: 'Stocks',
+          assetId: 'asset-uuid-1',
           quantity: 10,
           purchasePrice: 150,
-          currentValue: 170,
           purchaseDate: new Date(),
         },
         {
           id: 'investment-2',
           userId: userId,
-          assetName: 'US Treasury Bond',
-          assetType: 'Bonds',
+          assetId: 'asset-uuid-2',
           quantity: 5,
           purchasePrice: 1000,
-          currentValue: 1010,
           purchaseDate: new Date(),
         }
       ];
@@ -176,7 +158,7 @@ describe('Investment Controller (TDD)', () => {
       expect(response.status).toBe(200);
       expect(response.body).toBeInstanceOf(Array);
       expect(response.body).toHaveLength(2);
-      expect(response.body[0].assetName).toBe('Apple Inc.');
+      expect(response.body[0].assetId).toBe('asset-uuid-1');
     });
   });
 
@@ -185,11 +167,9 @@ describe('Investment Controller (TDD)', () => {
       const mockInvestment: Investment = {
         id: 'investment-1',
         userId: userId,
-        assetName: 'Apple Inc.',
-        assetType: 'Stocks',
+        assetId: 'asset-uuid-1',
         quantity: 10,
         purchasePrice: 150,
-        currentValue: 170,
         purchaseDate: new Date(),
       };
 
@@ -218,11 +198,9 @@ describe('Investment Controller (TDD)', () => {
       const otherUserInvestment: Investment = {
         id: 'investment-1',
         userId: 'different-user-uuid',
-        assetName: 'Apple Inc.',
-        assetType: 'Stocks',
+        assetId: 'asset-uuid-1',
         quantity: 10,
         purchasePrice: 150,
-        currentValue: 170,
         purchaseDate: new Date(),
       };
 
@@ -240,19 +218,16 @@ describe('Investment Controller (TDD)', () => {
   describe('PUT /api/investments/:id', () => {
     const updatePayload = {
       quantity: 12,
-      purchasePrice: 155.00,
-      currentValue: 180.00
+      purchasePrice: 155.00
     };
 
     it('should successfully update investment and return the updated entity', async () => {
       const originalInvestment: Investment = {
         id: 'investment-1',
         userId: userId,
-        assetName: 'Apple Inc.',
-        assetType: 'Stocks',
+        assetId: 'asset-uuid-1',
         quantity: 10,
         purchasePrice: 150,
-        currentValue: 170,
         purchaseDate: new Date(),
       };
 
@@ -260,7 +235,6 @@ describe('Investment Controller (TDD)', () => {
         ...originalInvestment,
         quantity: updatePayload.quantity,
         purchasePrice: updatePayload.purchasePrice,
-        currentValue: updatePayload.currentValue,
       };
 
       mockInvestmentRepository.findById.mockResolvedValue(originalInvestment);
@@ -273,19 +247,16 @@ describe('Investment Controller (TDD)', () => {
 
       expect(response.status).toBe(200);
       expect(response.body.quantity).toBe(12);
-      expect(response.body.currentValue).toBe(180.00);
       expect(mockInvestmentRepository.update).toHaveBeenCalledWith('investment-1', updatePayload);
     });
 
-    it('should return 400 if user tries to update restricted fields like assetType', async () => {
+    it('should return 400 if user tries to update restricted fields like assetId', async () => {
       const originalInvestment: Investment = {
         id: 'investment-1',
         userId: userId,
-        assetName: 'Apple Inc.',
-        assetType: 'Stocks',
+        assetId: 'asset-uuid-1',
         quantity: 10,
         purchasePrice: 150,
-        currentValue: 170,
         purchaseDate: new Date(),
       };
 
@@ -294,10 +265,10 @@ describe('Investment Controller (TDD)', () => {
       const response = await request(app)
         .put('/api/investments/investment-1')
         .set('Authorization', `Bearer ${authToken}`)
-        .send({ ...updatePayload, assetType: 'Bonds' });
+        .send({ ...updatePayload, assetId: 'different-asset-uuid' });
 
       expect(response.status).toBe(400);
-      expect(response.body).toHaveProperty('error', expect.stringContaining('Asset type cannot be modified after creation'));
+      expect(response.body).toHaveProperty('error', expect.stringContaining('Asset ID cannot be modified after creation'));
     });
 
     it('should return 404 if investment is not found', async () => {
@@ -317,11 +288,9 @@ describe('Investment Controller (TDD)', () => {
       const mockInvestment: Investment = {
         id: 'investment-1',
         userId: userId,
-        assetName: 'Apple Inc.',
-        assetType: 'Stocks',
+        assetId: 'asset-uuid-1',
         quantity: 10,
         purchasePrice: 150,
-        currentValue: 170,
         purchaseDate: new Date(),
       };
 

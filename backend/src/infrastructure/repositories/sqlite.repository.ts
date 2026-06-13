@@ -1,6 +1,6 @@
 import type { Database } from 'sqlite';
-import type { IUserRepository, IInvestmentRepository, ITransactionRepository } from '../../domain/repositories/interfaces.js';
-import type { User, Investment, Transaction, AssetType, TransactionType } from '../../domain/entities.js';
+import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from '../../domain/repositories/interfaces.js';
+import type { User, Investment, Transaction, AssetType, TransactionType, Asset } from '../../domain/entities.js';
 
 export class SqliteUserRepository implements IUserRepository {
   constructor(private db: Database) {}
@@ -14,6 +14,30 @@ export class SqliteUserRepository implements IUserRepository {
   }
 
   async create(user: Omit<User, 'id' | 'createdAt'>): Promise<User> {
+    throw new Error('Not implemented');
+  }
+}
+
+export class SqliteAssetRepository implements IAssetRepository {
+  constructor(private db: Database) {}
+
+  async findById(id: string): Promise<Asset | null> {
+    throw new Error('Not implemented');
+  }
+
+  async findBySymbol(symbol: string): Promise<Asset | null> {
+    throw new Error('Not implemented');
+  }
+
+  async findAll(): Promise<Asset[]> {
+    throw new Error('Not implemented');
+  }
+
+  async create(asset: Omit<Asset, 'id' | 'updatedAt'>): Promise<Asset> {
+    throw new Error('Not implemented');
+  }
+
+  async updatePrice(id: string, price: number): Promise<Asset> {
     throw new Error('Not implemented');
   }
 }
@@ -35,7 +59,7 @@ export class SqliteInvestmentRepository implements IInvestmentRepository {
 
   async update(
     id: string,
-    investment: Partial<Pick<Investment, 'quantity' | 'currentValue' | 'purchasePrice'>>
+    investment: Partial<Pick<Investment, 'quantity' | 'purchasePrice'>>
   ): Promise<Investment> {
     throw new Error('Not implemented');
   }

@@ -1,11 +1,12 @@
 import { jest, describe, it, expect, beforeEach } from '@jest/globals';
 import request from 'supertest';
 import { createApp } from '../../../src/app.js';
-import type { IUserRepository, IInvestmentRepository, ITransactionRepository } from '../../../src/domain/repositories/interfaces.js';
+import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from '../../../src/domain/repositories/interfaces.js';
 import type { User } from '../../../src/domain/entities.js';
 
 describe('Auth Controller (TDD)', () => {
   let mockUserRepository: jest.Mocked<IUserRepository>;
+  let mockAssetRepository: jest.Mocked<IAssetRepository>;
   let mockInvestmentRepository: jest.Mocked<IInvestmentRepository>;
   let mockTransactionRepository: jest.Mocked<ITransactionRepository>;
   let app: any;
@@ -15,6 +16,14 @@ describe('Auth Controller (TDD)', () => {
       findById: jest.fn(),
       findByEmail: jest.fn(),
       create: jest.fn(),
+    };
+
+    mockAssetRepository = {
+      findById: jest.fn(),
+      findBySymbol: jest.fn(),
+      findAll: jest.fn(),
+      create: jest.fn(),
+      updatePrice: jest.fn(),
     };
 
     mockInvestmentRepository = {
@@ -34,6 +43,7 @@ describe('Auth Controller (TDD)', () => {
 
     app = createApp({
       userRepository: mockUserRepository,
+      assetRepository: mockAssetRepository,
       investmentRepository: mockInvestmentRepository,
       transactionRepository: mockTransactionRepository,
     });
