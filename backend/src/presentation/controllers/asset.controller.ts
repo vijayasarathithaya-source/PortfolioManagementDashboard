@@ -6,9 +6,10 @@ export function createAssetRouter(assetRepository: IAssetRepository): Router {
   const router = Router();
   router.use(jwtMiddleware);
 
-  router.get('/', (req, res, next) => {
+  router.get('/', async (req, res, next) => {
     try {
-      throw new Error('Not implemented');
+      const assets = await assetRepository.findAll();
+      res.status(200).json(assets);
     } catch (err) {
       next(err);
     }

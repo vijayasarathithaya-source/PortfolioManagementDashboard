@@ -4,6 +4,7 @@ import { createAuthRouter } from './presentation/controllers/auth.controller';
 import { createInvestmentRouter } from './presentation/controllers/investment.controller';
 import { createTransactionRouter } from './presentation/controllers/transaction.controller';
 import { createAssetRouter } from './presentation/controllers/asset.controller';
+import { createPortfolioRouter } from './presentation/controllers/portfolio.controller';
 
 interface AppDependencies {
   userRepository: IUserRepository;
@@ -19,7 +20,8 @@ export function createApp(dependencies: AppDependencies): express.Application {
   app.use('/api/auth', createAuthRouter(dependencies.userRepository));
   app.use('/api/assets', createAssetRouter(dependencies.assetRepository));
   app.use('/api/investments', createInvestmentRouter(dependencies.investmentRepository));
-  app.use('/api/transactions', createTransactionRouter(dependencies.transactionRepository));
+  app.use('/api/transactions', createTransactionRouter(dependencies.transactionRepository, dependencies.investmentRepository));
+  app.use('/api/portfolio', createPortfolioRouter(dependencies.investmentRepository, dependencies.assetRepository));
 
   // Global Error Handler
   app.use((err: any, req: express.Request, res: express.Response, next: express.NextFunction) => {

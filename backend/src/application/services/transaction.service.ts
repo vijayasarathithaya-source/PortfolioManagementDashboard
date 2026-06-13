@@ -15,8 +15,34 @@ export class TransactionService {
   ) {}
 
   async createTransaction(userId: string, dto: CreateTransactionDto): Promise<Transaction> {
-    // Stub implementation for TDD: throws Error
-    throw new Error('Not implemented');
+    const investment = await this.investmentRepository.findById(dto.investmentId);
+    if (!investment) {
+      throw new Error('Investment not found');
+    }
+    if (investment.userId !== userId) {
+      throw new Error('Access denied to this investment');
+    }
+
+    let newQuantity = investment.quantity;
+    if (dto.transactionType === 'BUY') {
+      newQuantity += dto.quantity;
+    } else if (dto.transactionType === 'SELL') {
+      if (investment.quantity < dto.quantity) {
+        throw new Error('Insufficient quantity to sell');
+      }
+      newQuantity -= dto.quantity;
+    }
+
+    await this.investmentRepository.update(dto.investmentId, {
+      quantity: newQuantity,
+    });
+
+    return await this.transactionRepository.create({
+      investmentId: dto.investmentId,
+      transactionType: dto.transactionType,
+      quantity: dto.quantity,
+      price: dto.price,
+    });
   }
 
   async getTransactions(
@@ -28,7 +54,6 @@ export class TransactionService {
       transactionType?: TransactionType;
     }
   ): Promise<Transaction[]> {
-    // Stub implementation for TDD: throws Error
-    throw new Error('Not implemented');
+    return await this.transactionRepository.findByUserId(userId, filters);
   }
 }
