@@ -1,0 +1,62 @@
+<div class="table-responsive">
+  <table mat-table [dataSource]="data()" class="app-table">
+    @for (col of columns(); track col.key) {
+      <ng-container [matColumnDef]="col.key">
+        <th mat-header-cell *matHeaderCellDef>{{ col.label }}</th>
+        <td mat-cell *matCellDef="let element">
+          <!-- Text -->
+          @if (!col.type || col.type === 'text') {
+            {{ element[col.key] }}
+          }
+
+          <!-- Number -->
+          @if (col.type === 'number') {
+            {{ element[col.key] | number }}
+          }
+
+          <!-- Currency -->
+          @if (col.type === 'currency') {
+            <span class="font-semibold">{{ element[col.key] | currency:'USD':'symbol':'1.2-2' }}</span>
+          }
+
+          <!-- Percent -->
+          @if (col.type === 'percent') {
+            <span [ngClass]="element[col.key] >= 0 ? 'text-success' : 'text-danger'" class="font-semibold">
+              {{ element[col.key] >= 0 ? '+' : '' }}{{ element[col.key] | number:'1.2-2' }}%
+            </span>
+          }
+
+          <!-- Date -->
+          @if (col.type === 'date') {
+            {{ element[col.key] | date:'mediumDate' }}
+          }
+
+          <!-- Badge -->
+          @if (col.type === 'badge') {
+            <span [ngClass]="['badge', 'badge-' + element[col.key]?.toString().toLowerCase().replace(' ', '-')]">
+              {{ element[col.key] }}
+            </span>
+          }
+
+          <!-- Actions Slot -->
+          @if (col.type === 'actions') {
+            <div class="table-actions">
+              <button class="action-btn buy" (click)="onAction('buy', element, $event)">Buy</button>
+              @if (element.quantity > 0) {
+                <button class="action-btn sell" (click)="onAction('sell', element, $event)">Sell</button>
+              }
+            </div>
+          }
+        </td>
+      </ng-container>
+    }
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns()"></tr>
+    <tr
+      mat-row
+      *matRowDef="let row; columns: displayedColumns();"
+      (click)="onRowClick(row)"
+      class="table-row-interactive"
+    ></tr>
+  </table>
+</div>

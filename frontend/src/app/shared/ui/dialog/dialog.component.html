@@ -1,0 +1,27 @@
+<div class="app-dialog-container">
+  <h2 class="dialog-title">{{ title() }}</h2>
+  
+  <div class="dialog-content">
+    <ng-content></ng-content>
+  </div>
+  
+  @if (showActions()) {
+    <div class="dialog-actions">
+      <app-button
+        variant="stroked"
+        color="basic"
+        [disabled]="loading()"
+        [label]="cancelText()"
+        (btnClick)="onCancel()"
+      ></app-button>
+      <app-button
+        variant="raised"
+        color="primary"
+        [loading]="loading()"
+        [disabled]="confirmDisabled()"
+        [label]="confirmText()"
+        (btnClick)="onConfirm()"
+      ></app-button>
+    </div>
+  }
+</div>

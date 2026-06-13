@@ -21,6 +21,13 @@ describe('ButtonComponent', () => {
     expect(component).toBeTruthy();
   });
 
+  it('should render the label', () => {
+    fixture.componentRef.setInput('label', 'Click Me');
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.btn-text')?.textContent).toContain('Click Me');
+  });
+
   it('should emit click event when clicked', () => {
     let clicked = false;
     component.btnClick.subscribe(() => clicked = true);

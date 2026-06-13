@@ -1,0 +1,30 @@
+.confirm-dialog-wrapper {
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+}
+
+.dialog-title {
+  font-family: var(--font-display) !important;
+  font-size: 1.25rem !important;
+  font-weight: 700 !important;
+  color: var(--text-primary) !important;
+  margin-bottom: 12px !important;
+}
+
+.dialog-content {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  margin-bottom: 20px !important;
+  padding: 0 !important;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+  padding: 12px 0 0 0 !important;
+  border-top: 1px solid var(--border-color);
+}

@@ -1,0 +1,22 @@
+<div class="confirm-dialog-wrapper" [ngClass]="'dialog-type-' + (data.type || 'info')">
+  <h2 mat-dialog-title class="dialog-title">{{ data.title }}</h2>
+  
+  <mat-dialog-content class="dialog-content">
+    <p>{{ data.message }}</p>
+  </mat-dialog-content>
+  
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <app-button
+      variant="stroked"
+      color="basic"
+      [label]="data.cancelText || 'Cancel'"
+      (btnClick)="onCancel()"
+    ></app-button>
+    <app-button
+      variant="raised"
+      [color]="data.type === 'danger' ? 'warn' : 'primary'"
+      [label]="data.confirmText || 'Confirm'"
+      (btnClick)="onConfirm()"
+    ></app-button>
+  </mat-dialog-actions>
+</div>

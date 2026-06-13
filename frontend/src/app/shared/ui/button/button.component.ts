@@ -12,6 +12,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
   styleUrl: './button.component.scss',
 })
 export class ButtonComponent {
+  label = input<string>(''); // Resolves multiple ng-content projection limitations
   color = input<'primary' | 'accent' | 'warn' | 'basic'>('primary');
   type = input<'button' | 'submit' | 'reset'>('button');
   variant = input<'raised' | 'flat' | 'stroked' | 'basic' | 'icon'>('raised');
