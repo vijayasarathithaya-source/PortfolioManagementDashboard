@@ -31,13 +31,25 @@
 
 .filter-actions {
   display: flex;
-  align-items: center;
-  justify-content: flex-end;
-  height: 56px; // Height match to inputs to align horizontally on desktop
+  align-items: flex-end;
+  height: 56px;
+  
+  app-button {
+    ::ng-deep button {
+      height: 56px !important;
+      min-width: 56px !important;
+      padding: 0 !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      border-radius: var(--radius-md) !important;
+    }
+  }
   
   @media (max-width: 959px) {
     height: auto;
     margin-top: 8px;
+    justify-content: flex-end;
   }
 }
 

@@ -30,4 +30,36 @@ describe('TableComponent', () => {
 
     expect(component.displayedColumns()).toEqual(['name', 'price']);
   });
+
+  it('should resolve primary, secondary, and details columns correctly', () => {
+    const cols: TableColumn[] = [
+      { key: 'symbol', label: 'Symbol', type: 'text' },
+      { key: 'name', label: 'Name', type: 'text' },
+      { key: 'assetType', label: 'Type', type: 'badge' },
+      { key: 'quantity', label: 'Qty', type: 'number' },
+      { key: 'actions', label: 'Actions', type: 'actions' }
+    ];
+    fixture.componentRef.setInput('columns', cols);
+    fixture.detectChanges();
+
+    expect(component.primaryColumn()?.key).toBe('symbol');
+    expect(component.secondaryColumn()?.key).toBe('name');
+    expect(component.badgeColumn()?.key).toBe('assetType');
+    expect(component.actionsColumn()?.key).toBe('actions');
+
+    const detailKeys = component.detailColumns().map(c => c.key);
+    expect(detailKeys).toEqual(['quantity']);
+  });
+
+  it('should fallback primary column when symbol is absent', () => {
+    const cols: TableColumn[] = [
+      { key: 'name', label: 'Name', type: 'text' },
+      { key: 'quantity', label: 'Qty', type: 'number' }
+    ];
+    fixture.componentRef.setInput('columns', cols);
+    fixture.detectChanges();
+
+    expect(component.primaryColumn()?.key).toBe('name');
+    expect(component.secondaryColumn()).toBeNull();
+  });
 });

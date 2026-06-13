@@ -1,81 +1,81 @@
 @if (isAuthenticated()) {
-  <div class="app-layout">
-    <!-- Desktop Left Sidebar -->
-    <aside class="desktop-sidebar">
-      <div class="sidebar-header">
-        <span class="material-icons brand-icon">donut_large</span>
-        <h1 class="brand-title">Antigravity</h1>
-      </div>
-
-      <nav class="sidebar-nav">
-        <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
-          <span class="material-icons">dashboard</span>
-          <span>Dashboard</span>
-        </a>
-        <a routerLink="/portfolio" routerLinkActive="active" class="nav-item">
-          <span class="material-icons">account_balance_wallet</span>
-          <span>Holdings</span>
-        </a>
-        <a routerLink="/transactions" routerLinkActive="active" class="nav-item">
-          <span class="material-icons">history</span>
-          <span>Transactions</span>
-        </a>
-      </nav>
-
-      <div class="sidebar-footer">
-        <div class="user-profile">
-          <span class="material-icons avatar">account_circle</span>
-          <div class="user-details">
-            <span class="user-email" [title]="currentUser()?.email">{{ currentUser()?.email }}</span>
-          </div>
-        </div>
-        <button (click)="logout()" class="logout-btn" title="Sign Out">
-          <span class="material-icons">logout</span>
-          <span>Sign Out</span>
-        </button>
-      </div>
-    </aside>
-
-    <!-- Main Content Area -->
-    <div class="main-content-wrapper">
-      <!-- Desktop/Tablet Top Header (Hidden on Mobile) -->
-      <header class="top-header">
-        <div class="header-left">
-          <span class="welcome-text">Welcome back, investor</span>
-        </div>
-        <div class="header-right">
-          <span class="date-badge">{{ todayDate }}</span>
-        </div>
-      </header>
-
-      <!-- Router Content Outlet -->
-      <main class="page-container">
-        <router-outlet></router-outlet>
-      </main>
+<div class="app-layout">
+  <!-- Desktop Left Sidebar -->
+  <aside class="desktop-sidebar">
+    <div class="sidebar-header">
+      <span class="material-icons brand-icon">donut_large</span>
+      <h1 class="brand-title">Portfolio</h1>
     </div>
 
-    <!-- Mobile Bottom Navigation Bar (Hidden on Desktop) -->
-    <nav class="mobile-bottom-nav">
-      <a routerLink="/dashboard" routerLinkActive="active" class="mobile-nav-item">
+    <nav class="sidebar-nav">
+      <a routerLink="/dashboard" routerLinkActive="active" class="nav-item">
         <span class="material-icons">dashboard</span>
         <span>Dashboard</span>
       </a>
-      <a routerLink="/portfolio" routerLinkActive="active" class="mobile-nav-item">
+      <a routerLink="/portfolio" routerLinkActive="active" class="nav-item">
         <span class="material-icons">account_balance_wallet</span>
         <span>Holdings</span>
       </a>
-      <a routerLink="/transactions" routerLinkActive="active" class="mobile-nav-item">
+      <a routerLink="/transactions" routerLinkActive="active" class="nav-item">
         <span class="material-icons">history</span>
-        <span>History</span>
+        <span>Transactions</span>
       </a>
-      <button (click)="logout()" class="mobile-nav-item logout-nav-item">
-        <span class="material-icons">logout</span>
-        <span>Exit</span>
-      </button>
     </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-profile">
+        <span class="material-icons avatar">account_circle</span>
+        <div class="user-details">
+          <span class="user-email" [title]="currentUser()?.email">{{ currentUser()?.email }}</span>
+        </div>
+      </div>
+      <button (click)="logout()" class="logout-btn" title="Sign Out">
+        <span class="material-icons">logout</span>
+        <span>Sign Out</span>
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="main-content-wrapper">
+    <!-- Desktop/Tablet Top Header (Hidden on Mobile) -->
+    <header class="top-header">
+      <div class="header-left">
+        <span class="welcome-text">Welcome back, investor</span>
+      </div>
+      <div class="header-right">
+        <span class="date-badge">{{ todayDate }}</span>
+      </div>
+    </header>
+
+    <!-- Router Content Outlet -->
+    <main class="page-container">
+      <router-outlet></router-outlet>
+    </main>
   </div>
+
+  <!-- Mobile Bottom Navigation Bar (Hidden on Desktop) -->
+  <nav class="mobile-bottom-nav">
+    <a routerLink="/dashboard" routerLinkActive="active" class="mobile-nav-item">
+      <span class="material-icons">dashboard</span>
+      <span>Dashboard</span>
+    </a>
+    <a routerLink="/portfolio" routerLinkActive="active" class="mobile-nav-item">
+      <span class="material-icons">account_balance_wallet</span>
+      <span>Holdings</span>
+    </a>
+    <a routerLink="/transactions" routerLinkActive="active" class="mobile-nav-item">
+      <span class="material-icons">history</span>
+      <span>History</span>
+    </a>
+    <button (click)="logout()" class="mobile-nav-item logout-nav-item">
+      <span class="material-icons">logout</span>
+      <span>Exit</span>
+    </button>
+  </nav>
+</div>
 } @else {
-  <main class="auth-layout">
-    <router-outlet></router-outlet>
-  </main>
+<main class="auth-layout">
+  <router-outlet></router-outlet>
+</main>
 }

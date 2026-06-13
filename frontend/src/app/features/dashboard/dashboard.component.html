@@ -95,9 +95,7 @@
     <div class="dashboard-columns">
       <!-- Holdings Grid -->
       <div class="main-column">
-        <app-card title="My Holdings" subtitle="Active positions and yields in your portfolio">
-          <app-table [data]="holdings()" [columns]="tableColumns"></app-table>
-        </app-card>
+        <app-table [data]="holdings()" [columns]="tableColumns"></app-table>
       </div>
 
       <!-- Allocation & Side Widgets -->

@@ -10,7 +10,7 @@ class MockAuthService {
   isAuthenticated = signal<boolean>(false);
   currentUser = this.userSignal.asReadonly();
   getToken() { return null; }
-  logout() {}
+  logout() { }
 }
 
 describe('App', () => {
@@ -39,7 +39,7 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    
+
     // Header should not exist when not authenticated
     expect(compiled.querySelector('.app-layout')).toBeNull();
     expect(compiled.querySelector('router-outlet')).toBeTruthy();
@@ -51,8 +51,8 @@ describe('App', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    
-    expect(compiled.querySelector('.brand-title')?.textContent).toContain('Antigravity');
+
+    expect(compiled.querySelector('.brand-title')?.textContent).toContain('Portfolio');
     expect(compiled.querySelector('.user-email')?.textContent).toContain('investor@example.com');
   });
 });
