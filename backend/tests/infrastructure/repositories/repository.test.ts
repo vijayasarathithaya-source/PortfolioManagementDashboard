@@ -1,7 +1,7 @@
 import { describe, it, expect, beforeEach, afterEach } from '@jest/globals';
-import { bootstrapDatabase } from '../../../src/infrastructure/database/bootstrap.js';
-import { SqliteUserRepository, SqliteInvestmentRepository, SqliteTransactionRepository } from '../../../src/infrastructure/repositories/sqlite.repository.js';
-import type { User, Investment, Transaction } from '../../../src/domain/entities.js';
+import { bootstrapDatabase } from '../../../src/infrastructure/database/bootstrap';
+import { SqliteUserRepository, SqliteInvestmentRepository, SqliteTransactionRepository } from '../../../src/infrastructure/repositories/sqlite.repository';
+import type { User, Investment, Transaction } from '../../../src/domain/entities';
 import type { Database } from 'sqlite';
 
 describe('SQLite Repositories (TDD)', () => {
@@ -54,7 +54,7 @@ describe('SQLite Repositories (TDD)', () => {
         userId, 'user@example.com', 'hash', new Date().toISOString()
       ]);
       await db.run('INSERT INTO assets (id, symbol, name, assetType, currentPrice, updatedAt) VALUES (?, ?, ?, ?, ?, ?)', [
-        assetId, 'AAPL', 'Apple Inc.', 'Stocks', 170.00, new Date().toISOString()
+        assetId, 'AAPL_TEST', 'Apple Inc.', 'Stocks', 170.00, new Date().toISOString()
       ]);
     });
 
@@ -113,7 +113,7 @@ describe('SQLite Repositories (TDD)', () => {
         userId, 'user@example.com', 'hash', new Date().toISOString()
       ]);
       await db.run('INSERT INTO assets (id, symbol, name, assetType, currentPrice, updatedAt) VALUES (?, ?, ?, ?, ?, ?)', [
-        assetId, 'AAPL', 'Apple Inc.', 'Stocks', 170.00, new Date().toISOString()
+        assetId, 'AAPL_TEST', 'Apple Inc.', 'Stocks', 170.00, new Date().toISOString()
       ]);
       await db.run('INSERT INTO investments (id, userId, assetId, quantity, purchasePrice, purchaseDate) VALUES (?, ?, ?, ?, ?, ?)', [
         investmentId, userId, assetId, 10, 150, new Date().toISOString()

@@ -1,14 +1,16 @@
 import { jest, describe, it, expect, beforeEach } from '@jest/globals';
 import type { Response, NextFunction } from 'express';
 import jwt from 'jsonwebtoken';
-import { jwtMiddleware } from '../../../src/presentation/middlewares/jwt.middleware.js';
-import type { AuthenticatedRequest } from '../../../src/presentation/middlewares/jwt.middleware.js';
+import fs from 'fs';
+import { jwtMiddleware } from '../../../src/presentation/middlewares/jwt.middleware';
+import type { AuthenticatedRequest } from '../../../src/presentation/middlewares/jwt.middleware';
+import { EnvConfig } from '../../../src/infrastructure/config/env.config';
 
 describe('JWT Middleware (TDD)', () => {
   let mockRequest: Partial<AuthenticatedRequest>;
   let mockResponse: Partial<Response>;
   let nextFunction: NextFunction = jest.fn();
-  const JWT_SECRET = 'test-secret';
+  const privateKey = fs.readFileSync(EnvConfig.JWT_PRIVATE_KEY_PATH, 'utf8');
 
   beforeEach(() => {
     mockRequest = {};
@@ -17,13 +19,11 @@ describe('JWT Middleware (TDD)', () => {
       json: jest.fn() as any,
     };
     nextFunction = jest.fn();
-    // Ensure we override process.env.JWT_SECRET for tests
-    process.env.JWT_SECRET = JWT_SECRET;
   });
 
   it('should call next() and populate req.user if a valid token is provided', () => {
     const payload = { id: 'user-uuid-123', email: 'investor@example.com' };
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '1h' });
+    const token = jwt.sign(payload, privateKey, { algorithm: 'RS256', expiresIn: '1h' });
 
     mockRequest.headers = {
       authorization: `Bearer ${token}`,
@@ -66,7 +66,7 @@ describe('JWT Middleware (TDD)', () => {
   it('should return 401 if token is expired', () => {
     const payload = { id: 'user-uuid-123', email: 'investor@example.com' };
     // Generate an expired token
-    const token = jwt.sign(payload, JWT_SECRET, { expiresIn: '0s' });
+    const token = jwt.sign(payload, privateKey, { algorithm: 'RS256', expiresIn: '0s' });
 
     mockRequest.headers = {
       authorization: `Bearer ${token}`,

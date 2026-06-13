@@ -1,9 +1,11 @@
 import { jest, describe, it, expect, beforeEach } from '@jest/globals';
 import request from 'supertest';
 import jwt from 'jsonwebtoken';
-import { createApp } from '../../../src/app.js';
-import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from '../../../src/domain/repositories/interfaces.js';
-import type { Transaction } from '../../../src/domain/entities.js';
+import fs from 'fs';
+import { createApp } from '../../../src/app';
+import { EnvConfig } from '../../../src/infrastructure/config/env.config';
+import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from '../../../src/domain/repositories/interfaces';
+import type { Transaction } from '../../../src/domain/entities';
 
 describe('Transaction Controller (TDD)', () => {
   let mockUserRepository: jest.Mocked<IUserRepository>;
@@ -13,12 +15,12 @@ describe('Transaction Controller (TDD)', () => {
   let app: any;
   let authToken: string;
 
-  const JWT_SECRET = 'test-secret';
   const userId = 'user-uuid-123';
 
   beforeEach(() => {
-    process.env.JWT_SECRET = JWT_SECRET;
-    authToken = jwt.sign({ id: userId, email: 'investor@example.com' }, JWT_SECRET);
+    const privateKey = fs.readFileSync(EnvConfig.JWT_PRIVATE_KEY_PATH, 'utf8');
+    
+    authToken = jwt.sign({ id: userId, email: 'investor@example.com' }, privateKey, { algorithm: 'RS256' });
 
     mockUserRepository = {
       findById: jest.fn(),

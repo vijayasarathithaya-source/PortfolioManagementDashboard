@@ -1,8 +1,8 @@
 import { jest, describe, it, expect, beforeEach } from '@jest/globals';
-import { TransactionService } from '../../../src/application/services/transaction.service.js';
-import type { CreateTransactionDto } from '../../../src/application/services/transaction.service.js';
-import type { ITransactionRepository, IInvestmentRepository } from '../../../src/domain/repositories/interfaces.js';
-import type { Investment, Transaction } from '../../../src/domain/entities.js';
+import { TransactionService } from '../../../src/application/services/transaction.service';
+import type { CreateTransactionDto } from '../../../src/application/services/transaction.service';
+import type { ITransactionRepository, IInvestmentRepository } from '../../../src/domain/repositories/interfaces';
+import type { Investment, Transaction } from '../../../src/domain/entities';
 
 describe('Transaction Service (TDD)', () => {
   let mockTransactionRepository: jest.Mocked<ITransactionRepository>;

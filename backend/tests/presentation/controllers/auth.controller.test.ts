@@ -1,8 +1,8 @@
 import { jest, describe, it, expect, beforeEach } from '@jest/globals';
 import request from 'supertest';
-import { createApp } from '../../../src/app.js';
-import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from '../../../src/domain/repositories/interfaces.js';
-import type { User } from '../../../src/domain/entities.js';
+import { createApp } from '../../../src/app';
+import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from '../../../src/domain/repositories/interfaces';
+import type { User } from '../../../src/domain/entities';
 
 describe('Auth Controller (TDD)', () => {
   let mockUserRepository: jest.Mocked<IUserRepository>;

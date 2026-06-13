@@ -1,7 +1,7 @@
 import { jest, describe, it, expect, beforeEach } from '@jest/globals';
-import { PortfolioService } from '../../../src/application/services/portfolio.service.js';
-import type { IInvestmentRepository, IAssetRepository } from '../../../src/domain/repositories/interfaces.js';
-import type { Investment, Asset } from '../../../src/domain/entities.js';
+import { PortfolioService } from '../../../src/application/services/portfolio.service';
+import type { IInvestmentRepository, IAssetRepository } from '../../../src/domain/repositories/interfaces';
+import type { Investment, Asset } from '../../../src/domain/entities';
 
 describe('Portfolio Service Calculations (TDD)', () => {
   let mockInvestmentRepository: jest.Mocked<IInvestmentRepository>;

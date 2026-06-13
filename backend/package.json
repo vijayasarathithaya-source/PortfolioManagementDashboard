@@ -3,11 +3,10 @@
   "version": "1.0.0",
   "description": "Portfolio Management Dashboard API",
   "main": "dist/server.js",
-  "type": "module",
   "scripts": {
-    "dev": "node --env-file=.env --loader ts-node/esm src/server.ts",
+    "dev": "node --env-file=.env -r ts-node/register src/server.ts",
     "start": "node --env-file=.env dist/server.js",
-    "test": "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests",
+    "test": "jest --passWithNoTests",
     "build": "tsc"
   },
   "keywords": [],
