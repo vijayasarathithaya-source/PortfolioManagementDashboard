@@ -12,7 +12,8 @@ $theme: mat.m2-define-dark-theme((
     primary: $primary-palette,
     accent: $accent-palette,
     warn: $warn-palette,
-  )
+  ),
+  density: -2
 ));
 
 @include mat.all-component-themes($theme);

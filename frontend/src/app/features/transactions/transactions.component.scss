@@ -32,12 +32,16 @@
 .filter-actions {
   display: flex;
   align-items: flex-end;
-  height: 56px;
+  height: 48px;
+  
+  @media (min-width: 960px) {
+    margin-bottom: 4px;
+  }
   
   app-button {
     ::ng-deep button {
-      height: 56px !important;
-      min-width: 56px !important;
+      height: 48px !important;
+      min-width: 48px !important;
       padding: 0 !important;
       display: flex !important;
       align-items: center !important;
