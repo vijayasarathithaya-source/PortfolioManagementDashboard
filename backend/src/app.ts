@@ -1,10 +1,13 @@
 import express from 'express';
+import path from 'path';
 import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from './domain/repositories/interfaces';
 import { createAuthRouter } from './presentation/controllers/auth.controller';
 import { createInvestmentRouter } from './presentation/controllers/investment.controller';
 import { createTransactionRouter } from './presentation/controllers/transaction.controller';
 import { createAssetRouter } from './presentation/controllers/asset.controller';
 import { createPortfolioRouter } from './presentation/controllers/portfolio.controller';
+import swaggerUi from 'swagger-ui-express';
+import { swaggerDocument } from './presentation/swagger';
 
 interface AppDependencies {
   userRepository: IUserRepository;
@@ -16,7 +19,9 @@ interface AppDependencies {
 export function createApp(dependencies: AppDependencies): express.Application {
   const app = express();
   app.use(express.json());
+  app.use(express.static(path.resolve('public')));
 
+  app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
   app.use('/api/auth', createAuthRouter(dependencies.userRepository));
   app.use('/api/assets', createAssetRouter(dependencies.assetRepository));
   app.use('/api/investments', createInvestmentRouter(dependencies.investmentRepository));
