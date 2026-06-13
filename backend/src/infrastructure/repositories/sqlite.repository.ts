@@ -158,6 +158,8 @@ export class SqliteInvestmentRepository implements IInvestmentRepository {
 
   async create(investment: Omit<Investment, 'id'>): Promise<Investment> {
     const id = randomUUID();
+    const purchaseDateStr = investment.purchaseDate instanceof Date ? investment.purchaseDate.toISOString() : new Date(investment.purchaseDate).toISOString();
+    
     await this.db.run(
       'INSERT INTO investments (id, userId, assetId, quantity, purchasePrice, purchaseDate) VALUES (?, ?, ?, ?, ?, ?)',
       id,
@@ -165,8 +167,21 @@ export class SqliteInvestmentRepository implements IInvestmentRepository {
       investment.assetId,
       investment.quantity,
       investment.purchasePrice,
-      investment.purchaseDate instanceof Date ? investment.purchaseDate.toISOString() : new Date(investment.purchaseDate).toISOString()
+      purchaseDateStr
     );
+
+    // Automatically log a BUY transaction for the initial purchase
+    const txId = randomUUID();
+    await this.db.run(
+      'INSERT INTO transactions (id, investmentId, transactionType, quantity, price, transactionDate) VALUES (?, ?, ?, ?, ?, ?)',
+      txId,
+      id,
+      'BUY',
+      investment.quantity,
+      investment.purchasePrice,
+      purchaseDateStr
+    );
+
     return {
       id,
       userId: investment.userId,

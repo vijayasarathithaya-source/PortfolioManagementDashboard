@@ -1,0 +1,20 @@
+{
+  "name": "portfolio-bdd-tests",
+  "version": "1.0.0",
+  "description": "Cucumber BDD Integration tests for Portfolio Management Dashboard",
+  "main": "index.js",
+  "scripts": {
+    "test": "BACKEND_URL=http://localhost:3000 cucumber-js"
+  },
+  "dependencies": {
+    "@cucumber/cucumber": "^10.9.0",
+    "axios": "^1.7.9",
+    "sqlite": "^5.1.1",
+    "sqlite3": "^5.1.7",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.7.2"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.1"
+  }
+}
