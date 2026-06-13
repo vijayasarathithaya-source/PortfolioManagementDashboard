@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import type { IAssetRepository } from '../../domain/repositories/interfaces.js';
-import { jwtMiddleware } from '../middlewares/jwt.middleware.js';
+import type { IAssetRepository } from '../../domain/repositories/interfaces';
+import { jwtMiddleware } from '../middlewares/jwt.middleware';
 
 export function createAssetRouter(assetRepository: IAssetRepository): Router {
   const router = Router();

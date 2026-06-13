@@ -1,9 +1,9 @@
 import express from 'express';
-import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from './domain/repositories/interfaces.js';
-import { createAuthRouter } from './presentation/controllers/auth.controller.js';
-import { createInvestmentRouter } from './presentation/controllers/investment.controller.js';
-import { createTransactionRouter } from './presentation/controllers/transaction.controller.js';
-import { createAssetRouter } from './presentation/controllers/asset.controller.js';
+import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from './domain/repositories/interfaces';
+import { createAuthRouter } from './presentation/controllers/auth.controller';
+import { createInvestmentRouter } from './presentation/controllers/investment.controller';
+import { createTransactionRouter } from './presentation/controllers/transaction.controller';
+import { createAssetRouter } from './presentation/controllers/asset.controller';
 
 interface AppDependencies {
   userRepository: IUserRepository;

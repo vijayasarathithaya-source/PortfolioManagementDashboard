@@ -1,15 +1,17 @@
-import { createApp } from './app.js';
-import { bootstrapDatabase } from './infrastructure/database/bootstrap.js';
+import { createApp } from './app';
+import { bootstrapDatabase } from './infrastructure/database/bootstrap';
 import {
   SqliteUserRepository,
   SqliteAssetRepository,
   SqliteInvestmentRepository,
   SqliteTransactionRepository
-} from './infrastructure/repositories/sqlite.repository.js';
+} from './infrastructure/repositories/sqlite.repository';
+
+import { EnvConfig } from './infrastructure/config/env.config';
 
 async function startServer() {
-  const PORT = process.env.PORT || 3000;
-  const DB_PATH = process.env.DB_PATH || './database.sqlite';
+  const PORT = EnvConfig.PORT;
+  const DB_PATH = EnvConfig.DB_PATH;
 
   try {
     console.log(`Bootstrapping database at: ${DB_PATH}...`);

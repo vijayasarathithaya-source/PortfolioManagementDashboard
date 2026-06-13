@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import type { IInvestmentRepository } from '../../domain/repositories/interfaces.js';
-import { jwtMiddleware } from '../middlewares/jwt.middleware.js';
+import type { IInvestmentRepository } from '../../domain/repositories/interfaces';
+import { jwtMiddleware } from '../middlewares/jwt.middleware';
 
 export function createInvestmentRouter(investmentRepository: IInvestmentRepository): Router {
   const router = Router();

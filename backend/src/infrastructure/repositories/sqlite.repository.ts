@@ -1,20 +1,49 @@
+import { randomUUID } from 'crypto';
 import type { Database } from 'sqlite';
-import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from '../../domain/repositories/interfaces.js';
-import type { User, Investment, Transaction, AssetType, TransactionType, Asset } from '../../domain/entities.js';
+import type { IUserRepository, IInvestmentRepository, ITransactionRepository, IAssetRepository } from '../../domain/repositories/interfaces';
+import type { User, Investment, Transaction, AssetType, TransactionType, Asset } from '../../domain/entities';
 
 export class SqliteUserRepository implements IUserRepository {
   constructor(private db: Database) {}
 
   async findById(id: string): Promise<User | null> {
-    throw new Error('Not implemented');
+    const row = await this.db.get('SELECT * FROM users WHERE id = ?', id);
+    if (!row) return null;
+    return {
+      id: row.id,
+      email: row.email,
+      passwordHash: row.passwordHash,
+      createdAt: new Date(row.createdAt),
+    };
   }
 
   async findByEmail(email: string): Promise<User | null> {
-    throw new Error('Not implemented');
+    const row = await this.db.get('SELECT * FROM users WHERE email = ?', email);
+    if (!row) return null;
+    return {
+      id: row.id,
+      email: row.email,
+      passwordHash: row.passwordHash,
+      createdAt: new Date(row.createdAt),
+    };
   }
 
   async create(user: Omit<User, 'id' | 'createdAt'>): Promise<User> {
-    throw new Error('Not implemented');
+    const id = randomUUID();
+    const createdAt = new Date();
+    await this.db.run(
+      'INSERT INTO users (id, email, passwordHash, createdAt) VALUES (?, ?, ?, ?)',
+      id,
+      user.email,
+      user.passwordHash,
+      createdAt.toISOString()
+    );
+    return {
+      id,
+      email: user.email,
+      passwordHash: user.passwordHash,
+      createdAt,
+    };
   }
 }
 

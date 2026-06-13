@@ -1,4 +1,4 @@
-import type { IInvestmentRepository, IAssetRepository } from '../../domain/repositories/interfaces.js';
+import type { IInvestmentRepository, IAssetRepository } from '../../domain/repositories/interfaces';
 
 export interface PortfolioSummary {
   totalValue: number;

@@ -1,5 +1,5 @@
-import type { ITransactionRepository, IInvestmentRepository } from '../../domain/repositories/interfaces.js';
-import type { Transaction, TransactionType, AssetType } from '../../domain/entities.js';
+import type { ITransactionRepository, IInvestmentRepository } from '../../domain/repositories/interfaces';
+import type { Transaction, TransactionType, AssetType } from '../../domain/entities';
 
 export interface CreateTransactionDto {
   investmentId: string;

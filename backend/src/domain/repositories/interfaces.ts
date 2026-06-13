@@ -1,4 +1,4 @@
-import type { User, Investment, Transaction, AssetType, TransactionType, Asset } from '../entities.js';
+import type { User, Investment, Transaction, AssetType, TransactionType, Asset } from '../entities';
 
 export interface IUserRepository {
   findById(id: string): Promise<User | null>;

@@ -1,6 +1,6 @@
 import { Router } from 'express';
-import type { ITransactionRepository } from '../../domain/repositories/interfaces.js';
-import { jwtMiddleware } from '../middlewares/jwt.middleware.js';
+import type { ITransactionRepository } from '../../domain/repositories/interfaces';
+import { jwtMiddleware } from '../middlewares/jwt.middleware';
 
 export function createTransactionRouter(transactionRepository: ITransactionRepository): Router {
   const router = Router();
