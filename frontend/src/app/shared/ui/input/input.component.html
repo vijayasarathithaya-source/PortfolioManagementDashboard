@@ -11,6 +11,7 @@
     matInput
     [type]="type() === 'password' ? (hidePassword() ? 'password' : 'text') : type()"
     [placeholder]="placeholder()"
+    [attr.autocomplete]="autocomplete()"
     [formControl]="control()"
     (input)="onInput($event)"
     (blur)="onTouched()"

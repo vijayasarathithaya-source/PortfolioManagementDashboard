@@ -5,7 +5,7 @@
       <h1 class="brand-title">Portfolio Management</h1>
     </div>
     <app-card title="Create Account" subtitle="Register a new account to start managing assets.">
-      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form" autocomplete="off">
         
         @if (errorMessage()) {
           <div class="error-alert animate-fade-in">

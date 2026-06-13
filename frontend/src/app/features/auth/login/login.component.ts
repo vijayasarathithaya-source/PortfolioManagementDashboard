@@ -6,6 +6,7 @@ import { AuthService } from '../../../core/services/auth.service';
 import { CardComponent } from '../../../shared/ui/card/card.component';
 import { InputComponent } from '../../../shared/ui/input/input.component';
 import { ButtonComponent } from '../../../shared/ui/button/button.component';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-login',
@@ -17,6 +18,7 @@ import { ButtonComponent } from '../../../shared/ui/button/button.component';
     CardComponent,
     InputComponent,
     ButtonComponent,
+    MatCheckboxModule,
   ],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
@@ -25,6 +27,7 @@ export class LoginComponent {
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
+    rememberMe: new FormControl(false),
   });
 
   loading = signal(false);

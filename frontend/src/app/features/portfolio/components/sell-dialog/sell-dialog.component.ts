@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -31,8 +31,8 @@ export class SellDialogComponent implements OnInit {
   assetName = '';
   assetSymbol = '';
   maxQuantity = 0;
-  loading = false;
-  errorMessage = '';
+  loading = signal(false);
+  errorMessage = signal('');
 
   sellForm = new FormGroup({
     quantity: new FormControl<number | null>(null, [Validators.required, Validators.min(0.00001)]),
@@ -69,20 +69,20 @@ export class SellDialogComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
-    this.errorMessage = '';
+    this.loading.set(true);
+    this.errorMessage.set('');
     const { quantity, price } = this.sellForm.value;
 
     this.portfolioService
       .sellHolding(this.data.investmentId, quantity!, price!)
       .subscribe({
         next: () => {
-          this.loading = false;
+          this.loading.set(false);
           this.dialogRef.close(true);
         },
         error: (err) => {
-          this.loading = false;
-          this.errorMessage = err.error?.error || 'Transaction failed. Please try again.';
+          this.loading.set(false);
+          this.errorMessage.set(err.error?.error || 'Transaction failed. Please try again.');
         },
       });
   }

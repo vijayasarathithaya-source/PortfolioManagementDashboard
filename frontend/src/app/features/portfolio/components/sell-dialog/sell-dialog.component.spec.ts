@@ -91,7 +91,7 @@ describe('SellDialogComponent', () => {
     component.onSubmit();
 
     expect(portfolioServiceSpy.sellHolding).toHaveBeenCalled();
-    expect(component.errorMessage).toBe('Insufficient quantity');
+    expect(component.errorMessage()).toBe('Insufficient quantity');
     expect(dialogRefSpy.close).not.toHaveBeenCalled();
   });
 });

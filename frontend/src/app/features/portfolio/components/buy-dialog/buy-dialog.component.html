@@ -2,16 +2,16 @@
   [title]="isNew ? 'Buy New Asset' : 'Buy Asset Position'"
   confirmText="Buy"
   cancelText="Cancel"
-  [loading]="loading"
+  [loading]="loading()"
   [confirmDisabled]="buyForm.invalid"
   (confirm)="onSubmit()"
   (cancel)="onCancel()"
 >
   <form [formGroup]="buyForm" class="dialog-form">
     
-    @if (errorMessage) {
+    @if (errorMessage()) {
       <div class="error-alert animate-fade-in">
-        {{ errorMessage }}
+        {{ errorMessage() }}
       </div>
     }
 

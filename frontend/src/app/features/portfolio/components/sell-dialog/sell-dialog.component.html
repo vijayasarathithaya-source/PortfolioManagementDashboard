@@ -2,16 +2,16 @@
   title="Sell Asset Position"
   confirmText="Sell"
   cancelText="Cancel"
-  [loading]="loading"
+  [loading]="loading()"
   [confirmDisabled]="sellForm.invalid"
   (confirm)="onSubmit()"
   (cancel)="onCancel()"
 >
   <form [formGroup]="sellForm" class="dialog-form">
     
-    @if (errorMessage) {
+    @if (errorMessage()) {
       <div class="error-alert animate-fade-in">
-        {{ errorMessage }}
+        {{ errorMessage() }}
       </div>
     }
 

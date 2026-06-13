@@ -136,3 +136,75 @@
     }
   }
 }
+
+// Mobile Responsive List View
+@media (max-width: 768px) {
+  :host {
+    border: none;
+    background: transparent;
+    border-radius: 0;
+  }
+
+  .table-responsive {
+    overflow: visible;
+  }
+
+  .app-table {
+    display: block;
+    width: 100%;
+    border: none;
+
+    thead, tbody, th, td, tr {
+      display: block;
+      width: 100%;
+      box-sizing: border-box;
+    }
+
+    th.mat-mdc-header-cell {
+      display: none;
+    }
+
+    tr.mat-mdc-row {
+      margin-bottom: 16px;
+      border: 1px solid var(--border-color) !important;
+      border-radius: var(--radius-md);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+      background-color: var(--bg-card, #ffffff);
+      padding: 16px;
+      
+      &:last-child {
+        margin-bottom: 0;
+      }
+    }
+
+    td.mat-mdc-cell {
+      border: none !important;
+      border-bottom: 1px solid var(--border-color) !important;
+      padding: 12px 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      text-align: right;
+
+      &:last-child {
+        border-bottom: 0 !important;
+        padding-bottom: 0;
+      }
+      &:first-child {
+        padding-top: 0;
+      }
+
+      &::before {
+        content: attr(data-label);
+        font-family: var(--font-display);
+        font-size: 0.825rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        color: var(--text-secondary);
+        margin-right: 16px;
+        text-align: left;
+        flex-shrink: 0;
+      }
+    }
+  }
+}

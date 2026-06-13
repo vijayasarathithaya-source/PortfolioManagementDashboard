@@ -34,6 +34,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
   errorMsg = input<string>('');
   icon = input<string>('');
   hint = input<string>('');
+  autocomplete = input<string>('off');
   control = input<FormControl>(new FormControl());
 
   value: any = '';

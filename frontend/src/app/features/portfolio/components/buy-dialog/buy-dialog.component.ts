@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -37,8 +37,8 @@ export class BuyDialogComponent implements OnInit {
   assetName = '';
   assetSymbol = '';
   assetOptions: DropdownOption[] = [];
-  loading = false;
-  errorMessage = '';
+  loading = signal(false);
+  errorMessage = signal('');
 
   buyForm = new FormGroup({
     assetId: new FormControl(''),
@@ -71,18 +71,18 @@ export class BuyDialogComponent implements OnInit {
   }
 
   loadAssets(): void {
-    this.loading = true;
+    this.loading.set(true);
     this.assetService.getAssets().subscribe({
       next: (assets) => {
         this.assetOptions = assets.map((a) => ({
           value: a.id,
           label: `${a.symbol} - ${a.name}`,
         }));
-        this.loading = false;
+        this.loading.set(false);
       },
       error: (err) => {
-        this.errorMessage = err.error?.error || 'Failed to load assets';
-        this.loading = false;
+        this.errorMessage.set(err.error?.error || 'Failed to load assets');
+        this.loading.set(false);
       },
     });
   }
@@ -93,8 +93,8 @@ export class BuyDialogComponent implements OnInit {
       return;
     }
 
-    this.loading = true;
-    this.errorMessage = '';
+    this.loading.set(true);
+    this.errorMessage.set('');
     const { assetId, quantity, purchasePrice, purchaseDate } = this.buyForm.value;
 
     const request$ = this.isNew
@@ -112,12 +112,12 @@ export class BuyDialogComponent implements OnInit {
 
     request$.subscribe({
       next: () => {
-        this.loading = false;
+        this.loading.set(false);
         this.dialogRef.close(true);
       },
       error: (err) => {
-        this.loading = false;
-        this.errorMessage = err.error?.error || 'Transaction failed. Please try again.';
+        this.loading.set(false);
+        this.errorMessage.set(err.error?.error || 'Transaction failed. Please try again.');
       },
     });
   }

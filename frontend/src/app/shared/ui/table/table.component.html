@@ -3,7 +3,7 @@
     @for (col of columns(); track col.key) {
       <ng-container [matColumnDef]="col.key">
         <th mat-header-cell *matHeaderCellDef>{{ col.label }}</th>
-        <td mat-cell *matCellDef="let element">
+        <td mat-cell *matCellDef="let element" [attr.data-label]="col.label">
           <!-- Text -->
           @if (!col.type || col.type === 'text') {
             {{ element[col.key] }}

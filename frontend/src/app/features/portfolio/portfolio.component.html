@@ -38,13 +38,11 @@
   } @else {
     <!-- Holdings Table -->
     <div class="holdings-table-container">
-      <app-card>
-        <app-table 
-          [data]="holdings()" 
-          [columns]="tableColumns"
-          (actionClick)="onTableAction($event)"
-        ></app-table>
-      </app-card>
+      <app-table 
+        [data]="holdings()" 
+        [columns]="tableColumns"
+        (actionClick)="onTableAction($event)"
+      ></app-table>
     </div>
   }
 }

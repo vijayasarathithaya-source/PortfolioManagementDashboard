@@ -5,7 +5,7 @@
       <h1 class="brand-title">Portfolio Management</h1>
     </div>
     <app-card title="Sign In" subtitle="Welcome back! Please login to your portfolio.">
-      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form">
+      <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="auth-form" autocomplete="off">
         
         @if (errorMessage()) {
           <div class="error-alert animate-fade-in">
@@ -32,6 +32,10 @@
           formControlName="password"
           errorMsg="Password must be at least 6 characters"
         ></app-input>
+
+        <div class="remember-me-container" style="margin-bottom: 24px; display: flex; justify-content: flex-start;">
+          <mat-checkbox formControlName="rememberMe" color="primary">Remember me</mat-checkbox>
+        </div>
 
         <div class="form-actions">
           <app-button
