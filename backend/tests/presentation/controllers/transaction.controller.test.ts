@@ -84,6 +84,15 @@ describe('Transaction Controller (TDD)', () => {
         transactionDate: new Date()
       };
 
+      mockInvestmentRepository.findById.mockResolvedValue({
+        id: validPayload.investmentId,
+        userId: userId,
+        assetId: 'asset-uuid-1',
+        quantity: 10,
+        purchasePrice: 100,
+        purchaseDate: new Date()
+      });
+      mockInvestmentRepository.update.mockResolvedValue({} as any);
       mockTransactionRepository.create.mockResolvedValue(mockCreatedTransaction);
 
       const response = await request(app)
