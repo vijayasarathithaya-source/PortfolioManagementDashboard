@@ -1,0 +1,41 @@
+<div class="loading-state-container animate-fade-in" [ngClass]="'loading-mode-' + mode()">
+  @if (mode() === 'spinner') {
+    <div class="spinner-wrapper">
+      <mat-progress-spinner mode="indeterminate" diameter="48"></mat-progress-spinner>
+      @if (message()) {
+        <p class="loading-message">{{ message() }}</p>
+      }
+    </div>
+  }
+
+  @if (mode() === 'skeleton-table') {
+    <div class="skeleton-table">
+      <div class="skeleton-header-row">
+        <div class="skeleton-cell header-cell"></div>
+        <div class="skeleton-cell header-cell"></div>
+        <div class="skeleton-cell header-cell"></div>
+        <div class="skeleton-cell header-cell"></div>
+      </div>
+      @for (row of [1, 2, 3, 4, 5]; track row) {
+        <div class="skeleton-row">
+          <div class="skeleton-cell"></div>
+          <div class="skeleton-cell"></div>
+          <div class="skeleton-cell"></div>
+          <div class="skeleton-cell"></div>
+        </div>
+      }
+    </div>
+  }
+
+  @if (mode() === 'skeleton-card') {
+    <div class="skeleton-card-grid">
+      @for (card of [1, 2, 3]; track card) {
+        <div class="skeleton-card">
+          <div class="skeleton-title"></div>
+          <div class="skeleton-subtitle"></div>
+          <div class="skeleton-value"></div>
+        </div>
+      }
+    </div>
+  }
+</div>

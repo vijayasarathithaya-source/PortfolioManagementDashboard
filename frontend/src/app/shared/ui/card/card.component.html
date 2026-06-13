@@ -1,0 +1,29 @@
+<mat-card [class.card-loading]="loading()">
+  @if (title() || subtitle() || loading()) {
+    <mat-card-header>
+      <div class="card-title-group">
+        @if (title()) {
+          <mat-card-title>{{ title() }}</mat-card-title>
+        }
+        @if (subtitle()) {
+          <mat-card-subtitle>{{ subtitle() }}</mat-card-subtitle>
+        }
+      </div>
+      <div class="card-actions-wrapper">
+        <ng-content select="[card-header-actions]"></ng-content>
+      </div>
+    </mat-card-header>
+  }
+  
+  <mat-card-content>
+    @if (loading()) {
+      <div class="card-loader-container">
+        <div class="card-spinner"></div>
+      </div>
+    } @else {
+      <ng-content></ng-content>
+    }
+  </mat-card-content>
+
+  <ng-content select="[card-footer]"></ng-content>
+</mat-card>

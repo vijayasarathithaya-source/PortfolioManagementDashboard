@@ -1,0 +1,70 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+mat-card {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  overflow: hidden;
+}
+
+mat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 16px 20px 8px 20px !important;
+}
+
+.card-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+mat-card-title {
+  font-family: var(--font-display) !important;
+  font-size: 1.125rem !important;
+  font-weight: 600 !important;
+  color: var(--text-primary) !important;
+}
+
+mat-card-subtitle {
+  font-family: var(--font-body) !important;
+  font-size: 0.875rem !important;
+  color: var(--text-secondary) !important;
+  margin-top: 0 !important;
+}
+
+.card-actions-wrapper {
+  margin-left: auto;
+}
+
+mat-card-content {
+  padding: 8px 20px 20px 20px !important;
+  flex-grow: 1;
+}
+
+.card-loader-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 120px;
+}
+
+.card-spinner {
+  width: 28px;
+  height: 28px;
+  border: 3px solid var(--border-color);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: cardSpin 0.8s linear infinite;
+}
+
+@keyframes cardSpin {
+  to {
+    transform: rotate(360deg);
+  }
+}
