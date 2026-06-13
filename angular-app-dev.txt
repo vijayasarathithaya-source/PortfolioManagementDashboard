@@ -1,0 +1,267 @@
+Angular 20 Portfolio Management AI Development Rules
+
+1. Project Foundation
+Create Angular 20 application.
+
+Requirements:
+- Standalone Components only
+- Strict TypeScript mode enabled
+- SCSS styling
+- Angular Signals preferred over RxJS where applicable
+- Angular Material UI
+- Angular CDK usage encouraged
+- No NgModules
+- Lazy loading for all feature modules
+- Route based code splitting
+- PWA enabled
+- Mobile-first responsive design
+
+2. Component Structure Rules
+Every component must have separate files:
+
+component-name/
+ ├── component-name.component.ts
+ ├── component-name.component.html
+ ├── component-name.component.scss
+ └── component-name.component.spec.ts
+
+Never use:
+- inline template
+- inline styles
+example
+@Component({
+
+ selector:'app-user-list',
+
+ templateUrl:'./user-list.component.html',
+
+ styleUrls:['./user-list.component.scss']
+
+})
+
+3. Architecture Rules
+
+Follow Clean Architecture.
+src/app/
+
+core/
+ shared/
+ features/
+
+ Core Layer
+ core/
+ ├── services
+ ├── interceptors
+ ├── guards
+ ├── constants
+ ├── config
+ ├── models
+
+ Contains:
+
+* Authentication
+* API Client
+* Environment
+* Global Config
+
+Shared Layer
+shared/
+ ├── ui
+ ├── pipes
+ ├── directives
+ ├── validators
+ ├── utils
+
+ Reusable components only.
+
+ Feature Layer
+ features/
+
+portfolio/
+accounts/
+transactions/
+holdings/
+reports/
+dashboard/
+settings/
+
+Feature modules must not directly depend on each other.
+
+⸻
+
+4. Reusable UI Components First
+
+Before creating screens, create reusable controls.
+
+Inputs
+shared/ui/
+ ├── input
+ ├── textarea
+ ├── dropdown
+ ├── datepicker
+ ├── autocomplete
+ ├── checkbox
+ ├── radio
+ ├── toggle
+
+Layout Components
+page-header
+page-container
+card
+section
+dialog
+drawer
+
+Data Components
+table
+grid
+empty-state
+loading
+skeleton
+pagination
+
+Typography Components
+heading
+sub-heading
+body-text
+caption
+badge
+status-chip
+
+Feedback Components
+toast
+alert
+confirmation-dialog
+error-display
+
+5. Material Design Rules
+Use Angular Material.
+
+Use:
+- MatInput
+- MatSelect
+- MatTable
+- MatCard
+- MatToolbar
+- MatMenu
+- MatDialog
+- MatSnackBar
+
+Avoid:
+Bootstrap
+jQuery
+PrimeNG
+Custom CSS framework
+
+Single design system only.
+For Angular 20:
+Use Signals
+
+signal()
+computed()
+effect()
+
+Prefer:
+PortfolioStore
+AccountStore
+HoldingStore
+
+Avoid:
+Component level business logic
+
+7. Service Rules
+All API calls go through service layer.
+
+Never call HttpClient directly inside components.
+
+Example:
+portfolio.service.ts
+account.service.ts
+report.service.ts
+
+8. API Layer Rules
+Create dedicated API client.
+
+core/services/api.service.ts
+
+Responsibilities:
+
+* GET
+* POST
+* PUT
+* DELETE
+* Error Handling
+* Retry Logic
+* Token Handling
+
+9. Responsive Rules
+
+Must support:
+Mobile
+Tablet
+Laptop
+Desktop
+
+Breakpoints:
+xs: <600
+sm: 600-960
+md: 960-1280
+lg: 1280+
+
+Requirements:
+No horizontal scrolling
+Responsive tables
+Responsive forms
+Responsive dialogs
+
+10. Form Rules
+
+Always use:
+Reactive Forms
+
+Never use:  
+Template Driven Forms
+
+Each form must support:
+Validation
+Error Message
+Required Indicator
+Readonly Mode
+Disabled Mode
+
+11. Routing Rules
+Lazy loading mandatory
+
+Example:
+/portfolio
+/accounts
+/transactions
+/reports
+/settings
+
+Each feature owns its routes.
+
+⸻
+
+12. Security Rules
+JWT Authentication
+Route Guards
+HTTP Interceptors
+Role Based Access
+
+
+13. Testing Rules
+Jasmine + Karma
+
+Coverage:
+Services
+Stores
+Components
+
+Minimum:
+80% coverage
+
+14. Coding Standards
+SOLID principles
+DRY
+KISS

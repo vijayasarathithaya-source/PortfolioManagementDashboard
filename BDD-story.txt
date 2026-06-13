@@ -1,0 +1,241 @@
+PORTFOLIO MANAGEMENT - BDD STORIES
+
+NOTE:
+Investment Edit and Delete features have been removed.
+Portfolio changes are managed through BUY and SELL transactions.
+
+====================================================
+FEATURE: USER LOGIN
+====================================================
+
+Feature: User Login
+
+As an Investor
+I want to login securely
+So that I can access my portfolio
+
+Scenario: Successful Login
+  Given the user exists
+  And the account is active
+  When the user enters valid email and password
+  Then the system should generate JWT token
+  And the user should be redirected to Dashboard
+
+Scenario: Invalid Password
+  Given the user exists
+  When the user enters incorrect password
+  Then login should fail
+  And error message should be displayed
+
+Scenario: Invalid Email
+  Given the email does not exist
+  When the user attempts login
+  Then login should fail
+  And user should remain on Login page
+
+Scenario: Empty Credentials
+  Given the login page is displayed
+  When the user clicks Login without entering credentials
+  Then validation messages should be displayed
+
+====================================================
+FEATURE: PORTFOLIO DASHBOARD
+====================================================
+
+Feature: Portfolio Dashboard
+
+As an Investor
+I want to view my portfolio summary
+So that I can monitor my investments
+
+Scenario: Display Portfolio Summary
+  Given the user is authenticated
+  And investments exist
+  When the dashboard is opened
+  Then total portfolio value should be displayed
+  And total investment cost should be displayed
+  And total profit loss should be displayed
+  And total asset count should be displayed
+
+Scenario: No Investments Available
+  Given the user is authenticated
+  And no investments exist
+  When the dashboard is opened
+  Then empty state should be displayed
+  And Buy Investment button should be visible
+
+====================================================
+FEATURE: BUY INVESTMENT
+====================================================
+
+Feature: Buy Investment
+
+As an Investor
+I want to buy an investment
+So that I can add assets to my portfolio
+
+Scenario: Buy Investment Successfully
+  Given the user is authenticated
+  When valid investment details are entered
+  And Buy button is clicked
+  Then a BUY transaction should be created
+  And portfolio holdings should be updated
+  And success message should be displayed
+
+Scenario: Asset Name Missing
+  Given the Buy Investment screen is open
+  When asset name is empty
+  Then validation error should be displayed
+
+Scenario: Asset Type Missing
+  Given the Buy Investment screen is open
+  When asset type is not selected
+  Then validation error should be displayed
+
+Scenario: Invalid Quantity
+  Given the Buy Investment screen is open
+  When quantity is less than or equal to zero
+  Then validation error should be displayed
+
+Scenario: Invalid Purchase Price
+  Given the Buy Investment screen is open
+  When purchase price is less than or equal to zero
+  Then validation error should be displayed
+
+====================================================
+FEATURE: SELL INVESTMENT
+====================================================
+
+Feature: Sell Investment
+
+As an Investor
+I want to sell investments
+So that I can realize gains or losses
+
+Scenario: Sell Investment Successfully
+  Given investment holdings exist
+  When the user enters valid sell quantity
+  And clicks Sell
+  Then a SELL transaction should be created
+  And portfolio holdings should be reduced
+
+Scenario: Sell Entire Holding
+  Given investment holdings exist
+  When user sells all available quantity
+  Then holding quantity should become zero
+
+Scenario: Sell More Than Available Quantity
+  Given investment holdings exist
+  When user enters quantity greater than available quantity
+  Then transaction should be rejected
+  And validation error should be displayed
+
+====================================================
+FEATURE: TRANSACTION HISTORY
+====================================================
+
+Feature: View Transaction History
+
+As an Investor
+I want to review transactions
+So that I can track portfolio activities
+
+Scenario: Display Transactions
+  Given transaction records exist
+  When user opens transaction page
+  Then transaction list should be displayed
+
+Scenario: Filter By Transaction Type
+  Given transactions exist
+  When user selects BUY
+  Then only BUY transactions should be displayed
+
+Scenario: Filter By Transaction Type SELL
+  Given transactions exist
+  When user selects SELL
+  Then only SELL transactions should be displayed
+
+Scenario: Filter By Asset Type
+  Given transactions exist
+  When user selects asset type
+  Then matching transactions should be displayed
+
+Scenario: Filter By Date Range
+  Given transactions exist
+  When user selects date range
+  Then matching transactions should be displayed
+
+====================================================
+FEATURE: PROFIT LOSS CALCULATION
+====================================================
+
+Feature: Profit Loss Calculation
+
+Scenario: Calculate Profit
+  Given quantity is 100
+  And purchase price is 50
+  And current value is 60
+  When portfolio is loaded
+  Then profit loss should equal 1000
+
+Scenario: Calculate Loss
+  Given quantity is 100
+  And purchase price is 60
+  And current value is 50
+  When portfolio is loaded
+  Then profit loss should equal -1000
+
+====================================================
+FEATURE: PERFORMANCE PERCENTAGE
+====================================================
+
+Feature: Performance Percentage
+
+Scenario: Calculate Positive Return
+  Given purchase price is 100
+  And current value is 120
+  When portfolio is loaded
+  Then return percentage should equal 20
+
+Scenario: Calculate Negative Return
+  Given purchase price is 100
+  And current value is 80
+  When portfolio is loaded
+  Then return percentage should equal -20
+
+====================================================
+FEATURE: API SECURITY
+====================================================
+
+Feature: API Security
+
+Scenario: Access Protected API With Token
+  Given valid JWT token exists
+  When user calls portfolio API
+  Then data should be returned
+
+Scenario: Access Protected API Without Token
+  Given no JWT token exists
+  When user calls portfolio API
+  Then request should be rejected
+  And status code should be 401
+
+Scenario: Access Protected API With Expired Token
+  Given expired JWT token exists
+  When user calls portfolio API
+  Then request should be rejected
+  And status code should be 401
+
+====================================================
+FEATURE FILES
+====================================================
+
+requirements/
+
+authentication.feature
+portfolio-dashboard.feature
+buy-investment.feature
+sell-investment.feature
+transaction-history.feature
+portfolio-calculation.feature
+authorization.feature
