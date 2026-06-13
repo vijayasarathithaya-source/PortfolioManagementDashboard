@@ -159,4 +159,32 @@ describe('DashboardComponent', () => {
     expect(stocksAlloc?.percentage).toBe(60);
     expect(bondsAlloc?.percentage).toBe(40);
   });
+
+  it('should calculate asset distribution correctly', () => {
+    mockPortfolioService.totalValue.set(10000);
+    mockPortfolioService.holdingsSignal.set([
+      {
+        symbol: 'AAPL',
+        name: 'Apple Inc.',
+        currentValue: 6000,
+        assetType: 'Stocks',
+      },
+      {
+        symbol: 'MSFT',
+        name: 'Microsoft Corp.',
+        currentValue: 4000,
+        assetType: 'Stocks',
+      },
+    ]);
+
+    fixture.detectChanges();
+
+    const distribution = component.assetDistribution();
+    expect(distribution.items.length).toBe(2);
+    expect(distribution.items[0].symbol).toBe('AAPL');
+    expect(distribution.items[0].percentage).toBe(60);
+    expect(distribution.items[1].symbol).toBe('MSFT');
+    expect(distribution.items[1].percentage).toBe(40);
+    expect(distribution.gradientStyle).toContain('conic-gradient');
+  });
 });

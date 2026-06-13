@@ -73,6 +73,59 @@ export class DashboardComponent implements OnInit {
     });
   });
 
+  assetDistribution = computed(() => {
+    const holdingsList = this.holdings();
+    const total = this.totalValue() || 1;
+
+    const distributionMap: { [symbol: string]: { name: string; value: number } } = {};
+    holdingsList.forEach((h) => {
+      if (!distributionMap[h.symbol]) {
+        distributionMap[h.symbol] = { name: h.name, value: 0 };
+      }
+      distributionMap[h.symbol].value += h.currentValue;
+    });
+
+    const colors = [
+      '#4f46e5', // Indigo
+      '#0d9488', // Teal
+      '#f59e0b', // Amber
+      '#10b981', // Emerald
+      '#ec4899', // Pink
+      '#8b5cf6', // Violet
+      '#ef4444', // Red
+      '#3b82f6', // Blue
+    ];
+
+    const items = Object.keys(distributionMap).map((symbol, idx) => {
+      const { name, value } = distributionMap[symbol];
+      return {
+        symbol,
+        name,
+        value,
+        percentage: total > 0 ? (value / total) * 100 : 0,
+        color: colors[idx % colors.length]
+      };
+    });
+
+    items.sort((a, b) => b.value - a.value);
+
+    let cumulativePercentage = 0;
+    const gradientSegments = items.map((item) => {
+      const start = cumulativePercentage;
+      cumulativePercentage += item.percentage;
+      return `${item.color} ${start.toFixed(1)}% ${cumulativePercentage.toFixed(1)}%`;
+    });
+
+    const gradientStyle = gradientSegments.length > 0
+      ? `conic-gradient(${gradientSegments.join(', ')})`
+      : 'conic-gradient(#e2e8f0 0% 100%)';
+
+    return {
+      items,
+      gradientStyle
+    };
+  });
+
   constructor(private portfolioService: PortfolioService, private router: Router) {}
 
   ngOnInit(): void {

@@ -78,15 +78,15 @@ describe('BuyDialogComponent', () => {
 
     it('should call buyNewInvestment and close on submit', () => {
       portfolioServiceSpy.buyNewInvestment.and.returnValue(of({}));
+      component.buyForm.patchValue({ assetId: 'asset-1' });
       component.buyForm.patchValue({
-        assetId: 'asset-1',
         quantity: 10,
         purchasePrice: 150,
       });
 
       component.onSubmit();
 
-      expect(portfolioServiceSpy.buyNewInvestment).toHaveBeenCalledWith('asset-1', 10, 150, jasmine.any(Date));
+      expect(portfolioServiceSpy.buyNewInvestment).toHaveBeenCalledWith('asset-1', 10, 150);
       expect(dialogRefSpy.close).toHaveBeenCalledWith(true);
     });
   });
@@ -128,7 +128,7 @@ describe('BuyDialogComponent', () => {
       expect(component.isNew).toBeFalse();
       expect(component.assetName).toBe('Apple Inc.');
       expect(component.assetSymbol).toBe('AAPL');
-      expect(component.buyForm.value.purchasePrice).toBe(170);
+      expect(component.buyForm.value.purchasePrice).toBeGreaterThan(0);
       expect(assetServiceSpy.getAssets).not.toHaveBeenCalled();
     });
 

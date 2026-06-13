@@ -135,14 +135,35 @@
           </div>
         </app-card>
 
-        <!-- Total Assets Summary -->
-        <app-card>
-          <div class="assets-count-widget">
-            <div class="widget-details">
-              <span class="count-value">{{ assetsCount() }}</span>
-              <span class="count-label">Unique Assets</span>
+        <!-- Asset Distribution Card (Unique Assets) -->
+        <app-card title="Asset Share" subtitle="Portfolio value share of individual assets">
+          <div class="asset-distribution-widget">
+            <!-- Pie/Donut Chart -->
+            <div class="pie-chart-container">
+              <div class="donut-chart" [style.background]="assetDistribution().gradientStyle">
+                <div class="donut-center">
+                  <span class="center-value">{{ assetsCount() }}</span>
+                  <span class="center-label">Assets</span>
+                </div>
+              </div>
             </div>
-            <span class="material-icons widget-icon">pie_chart</span>
+
+            <!-- Distribution Details List -->
+            <div class="asset-legend-list">
+              @for (item of assetDistribution().items; track item.symbol) {
+                <div class="legend-item">
+                  <div class="legend-left">
+                    <span class="legend-color-dot" [style.background-color]="item.color"></span>
+                    <span class="legend-symbol">{{ item.symbol }}</span>
+                    <span class="legend-name" [title]="item.name">{{ item.name }}</span>
+                  </div>
+                  <div class="legend-right">
+                    <span class="legend-value">{{ item.value | currency }}</span>
+                    <span class="legend-pct">{{ item.percentage | number:'1.1-1' }}%</span>
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         </app-card>
       </div>

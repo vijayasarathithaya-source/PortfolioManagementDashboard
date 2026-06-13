@@ -7,7 +7,6 @@ import { AssetService } from '../../../../core/services/asset.service';
 import { DialogComponent } from '../../../../shared/ui/dialog/dialog.component';
 import { InputComponent } from '../../../../shared/ui/input/input.component';
 import { DropdownComponent, DropdownOption } from '../../../../shared/ui/dropdown/dropdown.component';
-import { DatePickerComponent } from '../../../../shared/ui/datepicker/datepicker.component';
 
 export interface BuyDialogData {
   investmentId?: string;
@@ -27,7 +26,6 @@ export interface BuyDialogData {
     DialogComponent,
     InputComponent,
     DropdownComponent,
-    DatePickerComponent,
   ],
   templateUrl: './buy-dialog.component.html',
   styleUrl: './buy-dialog.component.scss',
@@ -44,7 +42,6 @@ export class BuyDialogComponent implements OnInit {
     assetId: new FormControl(''),
     quantity: new FormControl<number | null>(null, [Validators.required, Validators.min(0.00001)]),
     purchasePrice: new FormControl<number | null>(null, [Validators.required, Validators.min(0.00001)]),
-    purchaseDate: new FormControl<Date>(new Date()),
   });
 
   constructor(
@@ -55,12 +52,22 @@ export class BuyDialogComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    this.buyForm.controls.assetId.valueChanges.subscribe((assetId) => {
+      if (assetId) {
+        const randomPrice = Math.round((50 + Math.random() * 300) * 100) / 100;
+        this.buyForm.patchValue({
+          purchasePrice: randomPrice,
+        });
+      }
+    });
+
     if (this.data && this.data.investmentId) {
       this.isNew = false;
       this.assetName = this.data.name || '';
       this.assetSymbol = this.data.symbol || '';
+      const randomPrice = Math.round((50 + Math.random() * 300) * 100) / 100;
       this.buyForm.patchValue({
-        purchasePrice: this.data.currentPrice || null,
+        purchasePrice: randomPrice,
       });
     } else {
       this.isNew = true;
@@ -95,14 +102,13 @@ export class BuyDialogComponent implements OnInit {
 
     this.loading.set(true);
     this.errorMessage.set('');
-    const { assetId, quantity, purchasePrice, purchaseDate } = this.buyForm.value;
+    const { assetId, quantity, purchasePrice } = this.buyForm.value;
 
     const request$ = this.isNew
       ? this.portfolioService.buyNewInvestment(
           assetId!,
           quantity!,
-          purchasePrice!,
-          purchaseDate || undefined
+          purchasePrice!
         )
       : this.portfolioService.buyExistingHolding(
           this.data!.investmentId!,

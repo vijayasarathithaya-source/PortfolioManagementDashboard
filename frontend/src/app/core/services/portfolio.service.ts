@@ -51,14 +51,12 @@ export class PortfolioService {
   buyNewInvestment(
     assetId: string,
     quantity: number,
-    purchasePrice: number,
-    purchaseDate?: Date
+    purchasePrice: number
   ): Observable<any> {
     return this.api.post<any>('/api/investments', {
       assetId,
       quantity,
       purchasePrice,
-      purchaseDate: purchaseDate || new Date(),
     });
   }
 

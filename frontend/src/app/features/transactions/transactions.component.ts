@@ -2,7 +2,7 @@ import { Component, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { TransactionService } from '../../core/services/transaction.service';
-import { CardComponent } from '../../shared/ui/card/card.component';
+
 import { PageHeaderComponent } from '../../shared/ui/page-header/page-header.component';
 import { EmptyStateComponent } from '../../shared/ui/empty-state/empty-state.component';
 import { LoadingStateComponent } from '../../shared/ui/loading-state/loading-state.component';
@@ -18,7 +18,7 @@ import { Transaction } from '../../core/models/portfolio.models';
   imports: [
     CommonModule,
     ReactiveFormsModule,
-    CardComponent,
+
     PageHeaderComponent,
     EmptyStateComponent,
     LoadingStateComponent,
@@ -70,7 +70,7 @@ export class TransactionsComponent implements OnInit {
     { key: 'totalAmount', label: 'Total Amount', type: 'currency' },
   ];
 
-  constructor(private transactionService: TransactionService) {}
+  constructor(private transactionService: TransactionService) { }
 
   ngOnInit(): void {
     this.loadTransactions();
@@ -92,7 +92,7 @@ export class TransactionsComponent implements OnInit {
       page: this.pageIndex() + 1, // Backend uses 1-based page index
       limit: this.pageSize(),
     };
-    
+
     if (startDate) {
       filters.startDate = new Date(startDate).toISOString();
     }

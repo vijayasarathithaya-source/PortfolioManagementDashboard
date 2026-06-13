@@ -52,14 +52,7 @@
       errorMsg="Price must be greater than zero"
     ></app-input>
 
-    <!-- Date Picker (Only for new asset initial purchase date) -->
-    @if (isNew) {
-      <app-datepicker
-        label="Purchase Date"
-        [control]="$any(buyForm.controls.purchaseDate)"
-        formControlName="purchaseDate"
-      ></app-datepicker>
-    }
+
 
   </form>
 </app-dialog>

@@ -48,6 +48,21 @@
       </div>
     </header>
 
+    <!-- Mobile Top Header (Hidden on Desktop) -->
+    <header class="mobile-top-header">
+      <div class="header-left">
+        <span class="material-icons brand-icon">donut_large</span>
+        <span class="brand-title">Portfolio</span>
+      </div>
+      <div class="header-right">
+        @if (currentUser()) {
+          <div class="user-avatar" [title]="currentUser()?.email">
+            {{ currentUser()?.email?.charAt(0)?.toUpperCase() }}
+          </div>
+        }
+      </div>
+    </header>
+
     <!-- Router Content Outlet -->
     <main class="page-container">
       <router-outlet></router-outlet>
