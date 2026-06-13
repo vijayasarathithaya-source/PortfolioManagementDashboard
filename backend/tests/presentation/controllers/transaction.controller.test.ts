@@ -169,20 +169,21 @@ describe('Transaction Controller (TDD)', () => {
         }
       ];
 
-      mockTransactionRepository.findByUserId.mockResolvedValue(mockTransactions);
+      mockTransactionRepository.findByUserId.mockResolvedValue({ transactions: mockTransactions, total: 2 });
 
       const response = await request(app)
         .get('/api/transactions')
         .set('Authorization', `Bearer ${authToken}`);
 
       expect(response.status).toBe(200);
-      expect(response.body).toBeInstanceOf(Array);
-      expect(response.body).toHaveLength(2);
-      expect(response.body[0].transactionType).toBe('BUY');
+      expect(response.body.transactions).toBeInstanceOf(Array);
+      expect(response.body.transactions).toHaveLength(2);
+      expect(response.body.total).toBe(2);
+      expect(response.body.transactions[0].transactionType).toBe('BUY');
     });
 
     it('should forward query filters (date range, type, assetType) to the repository', async () => {
-      mockTransactionRepository.findByUserId.mockResolvedValue([]);
+      mockTransactionRepository.findByUserId.mockResolvedValue({ transactions: [], total: 0 });
 
       const response = await request(app)
         .get('/api/transactions')

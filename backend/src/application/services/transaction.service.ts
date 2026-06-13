@@ -52,8 +52,10 @@ export class TransactionService {
       endDate?: Date;
       assetType?: AssetType;
       transactionType?: TransactionType;
+      page?: number;
+      limit?: number;
     }
-  ): Promise<Transaction[]> {
+  ): Promise<{ transactions: Transaction[]; total: number }> {
     return await this.transactionRepository.findByUserId(userId, filters);
   }
 }

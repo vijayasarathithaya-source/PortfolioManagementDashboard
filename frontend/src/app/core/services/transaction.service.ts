@@ -14,7 +14,9 @@ export class TransactionService {
     endDate?: string;
     transactionType?: string;
     assetType?: string;
-  }): Observable<Transaction[]> {
+    page?: number;
+    limit?: number;
+  }): Observable<{ transactions: Transaction[]; total: number }> {
     // Clean up empty filters
     const params: any = {};
     if (filters) {
@@ -22,7 +24,9 @@ export class TransactionService {
       if (filters.endDate) params.endDate = filters.endDate;
       if (filters.transactionType) params.transactionType = filters.transactionType;
       if (filters.assetType) params.assetType = filters.assetType;
+      if (filters.page) params.page = filters.page;
+      if (filters.limit) params.limit = filters.limit;
     }
-    return this.api.get<Transaction[]>('/api/transactions', params);
+    return this.api.get<{ transactions: Transaction[]; total: number }>('/api/transactions', params);
   }
 }

@@ -2,32 +2,32 @@
 
 <!-- Filters Card -->
 <div class="filters-container">
-  <app-card>
-    <form [formGroup]="filterForm" class="filters-form">
-      <div class="filter-fields">
-        <!-- Asset Type -->
-        <app-dropdown label="Asset Type" [control]="$any(filterForm.controls.assetType)" formControlName="assetType"
-          [options]="assetOptions"></app-dropdown>
 
-        <!-- Transaction Type -->
-        <app-dropdown label="Transaction Type" [control]="$any(filterForm.controls.transactionType)"
-          formControlName="transactionType" [options]="typeOptions"></app-dropdown>
+  <form [formGroup]="filterForm" class="filters-form">
+    <div class="filter-fields">
+      <!-- Asset Type -->
+      <app-dropdown label="Asset Type" [control]="$any(filterForm.controls.assetType)" formControlName="assetType"
+        [options]="assetOptions"></app-dropdown>
 
-        <!-- Start Date -->
-        <app-datepicker label="From Date" [control]="$any(filterForm.controls.startDate)"
-          formControlName="startDate"></app-datepicker>
+      <!-- Transaction Type -->
+      <app-dropdown label="Transaction Type" [control]="$any(filterForm.controls.transactionType)"
+        formControlName="transactionType" [options]="typeOptions"></app-dropdown>
 
-        <!-- End Date -->
-        <app-datepicker label="To Date" [control]="$any(filterForm.controls.endDate)"
-          formControlName="endDate"></app-datepicker>
-      </div>
+      <!-- Start Date -->
+      <app-datepicker label="From Date" [control]="$any(filterForm.controls.startDate)"
+        formControlName="startDate"></app-datepicker>
 
-      <div class="filter-actions">
-        <app-button variant="stroked" color="basic" label="" icon="restart_alt"
-          (btnClick)="onResetFilters()"></app-button>
-      </div>
-    </form>
-  </app-card>
+      <!-- End Date -->
+      <app-datepicker label="To Date" [control]="$any(filterForm.controls.endDate)"
+        formControlName="endDate"></app-datepicker>
+    </div>
+
+    <div class="filter-actions">
+      <app-button variant="stroked" color="basic" label="" icon="restart_alt"
+        (btnClick)="onResetFilters()"></app-button>
+    </div>
+  </form>
+
 </div>
 
 <!-- Loading State -->
@@ -54,7 +54,8 @@
 } @else {
 <!-- Transactions Table -->
 <div class="transactions-table-container">
-  <app-table [data]="transactionsList()" [columns]="tableColumns"></app-table>
+  <app-table [data]="transactionsList()" [columns]="tableColumns" [pagination]="true" [totalElements]="totalElements()"
+    [pageIndex]="pageIndex()" [pageSize]="pageSize()" (pageChange)="onPageChange($event)"></app-table>
 </div>
 }
 }

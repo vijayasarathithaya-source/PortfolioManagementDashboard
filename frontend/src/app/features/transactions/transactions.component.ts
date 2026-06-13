@@ -35,6 +35,11 @@ export class TransactionsComponent implements OnInit {
   loading = signal<boolean>(false);
   error = signal<string | null>(null);
 
+  // Pagination State
+  pageIndex = signal<number>(0);
+  pageSize = signal<number>(10);
+  totalElements = signal<number>(0);
+
   filterForm = new FormGroup({
     startDate: new FormControl<Date | null>(null),
     endDate: new FormControl<Date | null>(null),
@@ -72,6 +77,7 @@ export class TransactionsComponent implements OnInit {
 
     // Reload list reactively when filter criteria updates
     this.filterForm.valueChanges.subscribe(() => {
+      this.pageIndex.set(0); // Reset to page 0 when filters change
       this.loadTransactions();
     });
   }
@@ -82,7 +88,11 @@ export class TransactionsComponent implements OnInit {
 
     const { startDate, endDate, transactionType, assetType } = this.filterForm.value;
 
-    const filters: any = {};
+    const filters: any = {
+      page: this.pageIndex() + 1, // Backend uses 1-based page index
+      limit: this.pageSize(),
+    };
+    
     if (startDate) {
       filters.startDate = new Date(startDate).toISOString();
     }
@@ -100,13 +110,22 @@ export class TransactionsComponent implements OnInit {
     }
 
     this.transactionService.getTransactions(filters).subscribe({
-      next: (txs) => {
+      next: (res) => {
+        const anyRes = res as any;
+        const txs: Transaction[] = (anyRes && Array.isArray(anyRes.transactions))
+          ? anyRes.transactions
+          : (Array.isArray(anyRes) ? anyRes : []);
+        const total = (anyRes && typeof anyRes.total === 'number')
+          ? anyRes.total
+          : txs.length;
+
         this.transactionsList.set(
           txs.map((tx) => ({
             ...tx,
             totalAmount: tx.quantity * tx.price,
           }))
         );
+        this.totalElements.set(total);
         this.loading.set(false);
       },
       error: (err) => {
@@ -116,7 +135,14 @@ export class TransactionsComponent implements OnInit {
     });
   }
 
+  onPageChange(event: { pageIndex: number; pageSize: number }): void {
+    this.pageIndex.set(event.pageIndex);
+    this.pageSize.set(event.pageSize);
+    this.loadTransactions();
+  }
+
   onResetFilters(): void {
+    this.pageIndex.set(0);
     this.filterForm.reset({
       startDate: null,
       endDate: null,

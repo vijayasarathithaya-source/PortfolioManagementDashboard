@@ -35,7 +35,9 @@ export interface ITransactionRepository {
       endDate?: Date;
       assetType?: AssetType;
       transactionType?: TransactionType;
+      page?: number;
+      limit?: number;
     }
-  ): Promise<Transaction[]>;
+  ): Promise<{ transactions: Transaction[]; total: number }>;
   create(transaction: Omit<Transaction, 'id' | 'transactionDate'>): Promise<Transaction>;
 }

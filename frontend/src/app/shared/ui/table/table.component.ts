@@ -1,6 +1,7 @@
-import { Component, input, computed, output } from '@angular/core';
+import { Component, input, computed, output, signal, effect } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
 
 export interface TableColumn {
   key: string;
@@ -11,13 +12,32 @@ export interface TableColumn {
 @Component({
   selector: 'app-table',
   standalone: true,
-  imports: [CommonModule, MatTableModule],
+  imports: [CommonModule, MatTableModule, MatPaginatorModule],
   templateUrl: './table.component.html',
   styleUrl: './table.component.scss',
 })
 export class TableComponent {
   data = input<any[]>([]);
   columns = input<TableColumn[]>([]);
+  
+  pagination = input<boolean>(true);
+  totalElements = input<number>(0);
+  pageSize = input<number>(10);
+  pageIndex = input<number>(0);
+  pageChange = output<{ pageIndex: number; pageSize: number }>();
+
+  localPageIndex = signal<number>(0);
+  localPageSize = signal<number>(10);
+
+  constructor() {
+    effect(() => {
+      this.localPageIndex.set(this.pageIndex());
+    });
+
+    effect(() => {
+      this.localPageSize.set(this.pageSize());
+    });
+  }
 
   displayedColumns = computed(() => this.columns().map((c) => c.key));
 
@@ -52,6 +72,18 @@ export class TableComponent {
     );
   });
 
+  isServerSide = computed(() => this.totalElements() > 0);
+
+  paginatedData = computed(() => {
+    const rawData = this.data();
+    if (!this.pagination() || this.isServerSide()) {
+      return rawData;
+    }
+    const start = this.localPageIndex() * this.localPageSize();
+    const end = start + this.localPageSize();
+    return rawData.slice(start, end);
+  });
+
   rowClick = output<any>();
   actionClick = output<{ action: string; row: any }>();
 
@@ -62,5 +94,11 @@ export class TableComponent {
   onAction(actionName: string, row: any, event: MouseEvent): void {
     event.stopPropagation();
     this.actionClick.emit({ action: actionName, row });
+  }
+
+  onPage(event: any): void {
+    this.localPageIndex.set(event.pageIndex);
+    this.localPageSize.set(event.pageSize);
+    this.pageChange.emit({ pageIndex: event.pageIndex, pageSize: event.pageSize });
   }
 }

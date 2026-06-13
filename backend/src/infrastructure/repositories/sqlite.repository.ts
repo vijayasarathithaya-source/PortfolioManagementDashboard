@@ -238,8 +238,40 @@ export class SqliteTransactionRepository implements ITransactionRepository {
       endDate?: Date;
       assetType?: AssetType;
       transactionType?: TransactionType;
+      page?: number;
+      limit?: number;
     }
-  ): Promise<Transaction[]> {
+  ): Promise<{ transactions: Transaction[]; total: number }> {
+    // 1. Count total elements matching query
+    let countQuery = `
+      SELECT COUNT(*) as total FROM transactions t
+      JOIN investments i ON t.investmentId = i.id
+      JOIN assets a ON i.assetId = a.id
+      WHERE i.userId = ?
+    `;
+    const countParams: any[] = [userId];
+
+    if (filters?.startDate) {
+      countQuery += ' AND t.transactionDate >= ?';
+      countParams.push(filters.startDate.toISOString());
+    }
+    if (filters?.endDate) {
+      countQuery += ' AND t.transactionDate <= ?';
+      countParams.push(filters.endDate.toISOString());
+    }
+    if (filters?.transactionType) {
+      countQuery += ' AND t.transactionType = ?';
+      countParams.push(filters.transactionType);
+    }
+    if (filters?.assetType) {
+      countQuery += ' AND a.assetType = ?';
+      countParams.push(filters.assetType);
+    }
+
+    const countRow = await this.db.get(countQuery, countParams);
+    const total = countRow?.total ?? 0;
+
+    // 2. Fetch paginated data
     let query = `
       SELECT t.*, a.symbol, a.name, a.assetType FROM transactions t
       JOIN investments i ON t.investmentId = i.id
@@ -265,8 +297,17 @@ export class SqliteTransactionRepository implements ITransactionRepository {
       params.push(filters.assetType);
     }
 
+    // Always sort by transactionDate DESC so newer logs appear first
+    query += ' ORDER BY t.transactionDate DESC';
+
+    if (filters?.limit !== undefined && filters?.page !== undefined) {
+      const offset = (filters.page - 1) * filters.limit;
+      query += ' LIMIT ? OFFSET ?';
+      params.push(filters.limit, offset);
+    }
+
     const rows = await this.db.all(query, params);
-    return rows.map(row => ({
+    const transactions = rows.map(row => ({
       id: row.id,
       investmentId: row.investmentId,
       transactionType: row.transactionType as TransactionType,
@@ -277,6 +318,8 @@ export class SqliteTransactionRepository implements ITransactionRepository {
       name: row.name,
       assetType: row.assetType as AssetType,
     }));
+
+    return { transactions, total };
   }
 
   async create(transaction: Omit<Transaction, 'id' | 'transactionDate'>): Promise<Transaction> {

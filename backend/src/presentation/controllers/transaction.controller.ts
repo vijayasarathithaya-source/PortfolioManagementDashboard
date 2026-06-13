@@ -68,13 +68,15 @@ export function createTransactionRouter(
         return res.status(401).json({ error: 'Unauthorized' });
       }
 
-      const { startDate, endDate, transactionType, assetType } = req.query;
+      const { startDate, endDate, transactionType, assetType, page, limit } = req.query;
 
       const filters: {
         startDate?: Date;
         endDate?: Date;
         transactionType?: TransactionType;
         assetType?: AssetType;
+        page?: number;
+        limit?: number;
       } = {};
 
       if (startDate) {
@@ -89,9 +91,15 @@ export function createTransactionRouter(
       if (assetType === 'Stocks' || assetType === 'Bonds' || assetType === 'Mutual Funds') {
         filters.assetType = assetType as AssetType;
       }
+      if (page) {
+        filters.page = parseInt(page as string, 10);
+      }
+      if (limit) {
+        filters.limit = parseInt(limit as string, 10);
+      }
 
-      const transactions = await transactionService.getTransactions(userId, filters);
-      res.status(200).json(transactions);
+      const result = await transactionService.getTransactions(userId, filters);
+      res.status(200).json(result);
     } catch (err) {
       next(err);
     }

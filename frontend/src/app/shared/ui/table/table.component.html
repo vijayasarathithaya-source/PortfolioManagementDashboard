@@ -1,6 +1,6 @@
 <div class="table-container-desktop">
   <div class="table-responsive">
-    <table mat-table [dataSource]="data()" class="app-table">
+    <table mat-table [dataSource]="paginatedData()" class="app-table">
       @for (col of columns(); track col.key) {
         <ng-container [matColumnDef]="col.key">
           <th mat-header-cell *matHeaderCellDef>{{ col.label }}</th>
@@ -66,7 +66,7 @@
 </div>
 
 <div class="mobile-list-view">
-  @for (element of data(); track element) {
+  @for (element of paginatedData(); track element) {
     <div class="list-item-card" (click)="onRowClick(element)">
       <div class="list-item-header">
         <div class="list-item-title-group">
@@ -137,3 +137,16 @@
     </div>
   }
 </div>
+
+@if (pagination()) {
+  <div class="table-paginator-container">
+    <mat-paginator
+      [length]="totalElements() > 0 ? totalElements() : data().length"
+      [pageSize]="localPageSize()"
+      [pageIndex]="localPageIndex()"
+      [pageSizeOptions]="[5, 10, 25, 50]"
+      (page)="onPage($event)"
+      aria-label="Select page"
+    ></mat-paginator>
+  </div>
+}

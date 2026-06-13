@@ -155,8 +155,39 @@ describe('SQLite Repositories (TDD)', () => {
         endDate: new Date('2026-06-01'),
       });
 
-      expect(filtered).toHaveLength(1);
-      expect(filtered[0]?.id).toBe('tx-2');
+      expect(filtered.transactions).toHaveLength(1);
+      expect(filtered.total).toBe(1);
+      expect(filtered.transactions[0]?.id).toBe('tx-2');
+    });
+
+    it('should return paginated transactions in descending date order', async () => {
+      const dates = [
+        new Date('2026-01-01T10:00:00.000Z'),
+        new Date('2026-02-01T10:00:00.000Z'),
+        new Date('2026-03-01T10:00:00.000Z'),
+      ];
+      for (let i = 0; i < 3; i++) {
+        await db.run('INSERT INTO transactions (id, investmentId, transactionType, quantity, price, transactionDate) VALUES (?, ?, ?, ?, ?, ?)', [
+          `tx-pag-${i}`, investmentId, 'BUY', 1, 100, dates[i].toISOString()
+        ]);
+      }
+
+      const page1 = await transactionRepository.findByUserId(userId, {
+        page: 1,
+        limit: 2,
+      });
+      expect(page1.transactions).toHaveLength(2);
+      expect(page1.total).toBe(3);
+      expect(page1.transactions[0]?.id).toBe('tx-pag-2');
+      expect(page1.transactions[1]?.id).toBe('tx-pag-1');
+
+      const page2 = await transactionRepository.findByUserId(userId, {
+        page: 2,
+        limit: 2,
+      });
+      expect(page2.transactions).toHaveLength(1);
+      expect(page2.total).toBe(3);
+      expect(page2.transactions[0]?.id).toBe('tx-pag-0');
     });
   });
 });

@@ -23,7 +23,7 @@ class MockTransactionService {
   ];
 
   getTransactions(filters?: any) {
-    return of(this.mockTransactions);
+    return of({ transactions: this.mockTransactions, total: 1 });
   }
 }
 
@@ -73,7 +73,9 @@ describe('TransactionsComponent', () => {
   });
 
   it('should pass correct query filters to service', () => {
-    const getTxsSpy = spyOn(transactionServiceSpy, 'getTransactions').and.returnValue(of([]));
+    const getTxsSpy = spyOn(transactionServiceSpy, 'getTransactions').and.returnValue(
+      of({ transactions: [], total: 0 })
+    );
     fixture.detectChanges();
 
     component.filterForm.patchValue({
@@ -93,11 +95,15 @@ describe('TransactionsComponent', () => {
       endDate: expectedEndDate.toISOString(),
       transactionType: 'SELL',
       assetType: 'Bonds',
+      page: 1,
+      limit: 10,
     });
   });
 
   it('should display empty state when transactions list is empty', () => {
-    spyOn(transactionServiceSpy, 'getTransactions').and.returnValue(of([]));
+    spyOn(transactionServiceSpy, 'getTransactions').and.returnValue(
+      of({ transactions: [], total: 0 })
+    );
     fixture.detectChanges();
 
     expect(component.transactionsList().length).toBe(0);
@@ -129,5 +135,16 @@ describe('TransactionsComponent', () => {
     expect(component.error()).toBe('Network error details');
     const errorAlert = fixture.debugElement.query(By.css('.error-alert-box'));
     expect(errorAlert).toBeTruthy();
+  });
+
+  it('should update page signals and reload on page change', () => {
+    fixture.detectChanges();
+    spyOn(component, 'loadTransactions').and.callThrough();
+
+    component.onPageChange({ pageIndex: 2, pageSize: 25 });
+
+    expect(component.pageIndex()).toBe(2);
+    expect(component.pageSize()).toBe(25);
+    expect(component.loadTransactions).toHaveBeenCalled();
   });
 });

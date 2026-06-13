@@ -38,17 +38,18 @@ describe('TransactionService', () => {
   });
 
   it('should get transactions list without filters', () => {
-    apiServiceSpy.get.and.returnValue(of(mockTransactions));
+    apiServiceSpy.get.and.returnValue(of({ transactions: mockTransactions, total: 1 }));
 
-    service.getTransactions().subscribe((txs) => {
-      expect(txs).toEqual(mockTransactions);
+    service.getTransactions().subscribe((res) => {
+      expect(res.transactions).toEqual(mockTransactions);
+      expect(res.total).toBe(1);
     });
 
     expect(apiServiceSpy.get).toHaveBeenCalledWith('/api/transactions', {});
   });
 
   it('should query transactions with filters', () => {
-    apiServiceSpy.get.and.returnValue(of(mockTransactions));
+    apiServiceSpy.get.and.returnValue(of({ transactions: mockTransactions, total: 1 }));
     const filters = {
       startDate: '2026-06-01',
       endDate: '2026-06-13',
