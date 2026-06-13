@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { PortfolioService } from '../../core/services/portfolio.service';
 import { PageHeaderComponent } from '../../shared/ui/page-header/page-header.component';
-import { CardComponent } from '../../shared/ui/card/card.component';
 import { LoadingStateComponent } from '../../shared/ui/loading-state/loading-state.component';
 import { EmptyStateComponent } from '../../shared/ui/empty-state/empty-state.component';
 import { TableComponent, TableColumn } from '../../shared/ui/table/table.component';
@@ -18,7 +17,6 @@ import { SellDialogComponent } from './components/sell-dialog/sell-dialog.compon
     CommonModule,
     MatDialogModule,
     PageHeaderComponent,
-    CardComponent,
     LoadingStateComponent,
     EmptyStateComponent,
     TableComponent,

@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, signal, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -23,7 +23,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss',
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   loginForm = new FormGroup({
     email: new FormControl('', [Validators.required, Validators.email]),
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
@@ -35,6 +35,16 @@ export class LoginComponent {
 
   constructor(private authService: AuthService, private router: Router) {}
 
+  ngOnInit(): void {
+    const savedEmail = localStorage.getItem('remembered_email');
+    if (savedEmail) {
+      this.loginForm.patchValue({
+        email: savedEmail,
+        rememberMe: true,
+      });
+    }
+  }
+
   onSubmit(): void {
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
@@ -43,7 +53,13 @@ export class LoginComponent {
 
     this.loading.set(true);
     this.errorMessage.set('');
-    const { email, password } = this.loginForm.value;
+    const { email, password, rememberMe } = this.loginForm.value;
+
+    if (rememberMe) {
+      localStorage.setItem('remembered_email', email!);
+    } else {
+      localStorage.removeItem('remembered_email');
+    }
 
     this.authService.login(email!, password!).subscribe({
       next: () => {

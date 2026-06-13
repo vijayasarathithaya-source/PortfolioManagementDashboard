@@ -20,6 +20,7 @@
           icon="email"
           [control]="$any(loginForm.controls.email)"
           formControlName="email"
+          autocomplete="new-password"
           errorMsg="Please enter a valid email address"
         ></app-input>
 
@@ -30,6 +31,7 @@
           icon="lock"
           [control]="$any(loginForm.controls.password)"
           formControlName="password"
+          autocomplete="new-password"
           errorMsg="Password must be at least 6 characters"
         ></app-input>
 

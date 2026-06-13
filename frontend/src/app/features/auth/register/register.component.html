@@ -26,6 +26,7 @@
           icon="email"
           [control]="$any(registerForm.controls.email)"
           formControlName="email"
+          autocomplete="new-password"
           errorMsg="Please enter a valid email address"
         ></app-input>
 
@@ -36,6 +37,7 @@
           icon="lock"
           [control]="$any(registerForm.controls.password)"
           formControlName="password"
+          autocomplete="new-password"
           errorMsg="Password must be at least 6 characters"
         ></app-input>
 
@@ -46,6 +48,7 @@
           icon="lock"
           [control]="$any(registerForm.controls.confirmPassword)"
           formControlName="confirmPassword"
+          autocomplete="new-password"
           [errorMsg]="registerForm.hasError('mismatch') && registerForm.controls.confirmPassword.touched ? 'Passwords must match' : ''"
         ></app-input>
 
