@@ -94,6 +94,16 @@ h1, h2, h3, h4, h5, h6 {
   }
 }
 
+.mat-mdc-dialog-container {
+  .mdc-dialog__surface {
+    background-color: var(--bg-card) !important;
+    border: 1px solid var(--border-color) !important;
+    border-radius: var(--radius-lg) !important;
+    box-shadow: var(--shadow-premium), 0 0 30px rgba(0, 242, 254, 0.05) !important;
+    color: var(--text-primary) !important;
+  }
+}
+
 // Mobile-first structure utilities
 .container {
   width: 100%;

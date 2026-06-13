@@ -56,8 +56,50 @@ describe('BuyDialogComponent', () => {
     it('should initialize in new mode and load available assets', () => {
       expect(component.isNew).toBeTrue();
       expect(assetServiceSpy.getAssets).toHaveBeenCalled();
-      expect(component.assetOptions.length).toBe(1);
-      expect(component.assetOptions[0].value).toBe('asset-1');
+      expect(component.assetOptions().length).toBe(1);
+      expect(component.assetOptions()[0].value).toBe('asset-1');
+    });
+
+    it('should filter assets by type correctly', () => {
+      const multipleAssets: Asset[] = [
+        { id: 'asset-s', symbol: 'S1', name: 'Stock 1', assetType: 'Stocks', currentPrice: 10, updatedAt: new Date() },
+        { id: 'asset-b', symbol: 'B1', name: 'Bond 1', assetType: 'Bonds', currentPrice: 20, updatedAt: new Date() },
+        { id: 'asset-m', symbol: 'M1', name: 'Mutual Fund 1', assetType: 'Mutual Funds', currentPrice: 30, updatedAt: new Date() }
+      ];
+      component.allAssets.set(multipleAssets);
+      fixture.detectChanges();
+
+      component.selectType('ALL');
+      expect(component.assetOptions().length).toBe(3);
+
+      component.selectType('Stocks');
+      expect(component.assetOptions().length).toBe(1);
+      expect(component.assetOptions()[0].value).toBe('asset-s');
+
+      component.selectType('Bonds');
+      expect(component.assetOptions().length).toBe(1);
+      expect(component.assetOptions()[0].value).toBe('asset-b');
+
+      component.selectType('Mutual Funds');
+      expect(component.assetOptions().length).toBe(1);
+      expect(component.assetOptions()[0].value).toBe('asset-m');
+    });
+
+    it('should reset assetId and price on filter change if current asset does not match new type', () => {
+      const multipleAssets: Asset[] = [
+        { id: 'asset-s', symbol: 'S1', name: 'Stock 1', assetType: 'Stocks', currentPrice: 10, updatedAt: new Date() },
+        { id: 'asset-b', symbol: 'B1', name: 'Bond 1', assetType: 'Bonds', currentPrice: 20, updatedAt: new Date() }
+      ];
+      component.allAssets.set(multipleAssets);
+      component.buyForm.patchValue({
+        assetId: 'asset-s',
+        purchasePrice: 10
+      });
+      fixture.detectChanges();
+
+      component.selectType('Bonds');
+      expect(component.buyForm.controls.assetId.value).toBe('');
+      expect(component.buyForm.controls.purchasePrice.value).toBeNull();
     });
 
     it('should validate form fields correctly', () => {

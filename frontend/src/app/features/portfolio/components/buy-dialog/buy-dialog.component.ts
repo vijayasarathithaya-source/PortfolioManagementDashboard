@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit, signal } from '@angular/core';
+import { Component, Inject, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { MatDialogModule, MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
@@ -7,6 +7,7 @@ import { AssetService } from '../../../../core/services/asset.service';
 import { DialogComponent } from '../../../../shared/ui/dialog/dialog.component';
 import { InputComponent } from '../../../../shared/ui/input/input.component';
 import { DropdownComponent, DropdownOption } from '../../../../shared/ui/dropdown/dropdown.component';
+import { Asset } from '../../../../core/models/portfolio.models';
 
 export interface BuyDialogData {
   investmentId?: string;
@@ -34,9 +35,28 @@ export class BuyDialogComponent implements OnInit {
   isNew = true;
   assetName = '';
   assetSymbol = '';
-  assetOptions: DropdownOption[] = [];
   loading = signal(false);
   errorMessage = signal('');
+
+  // Signal-based Asset filtering state
+  allAssets = signal<Asset[]>([]);
+  selectedType = signal<string>('ALL');
+
+  filteredAssets = computed(() => {
+    const assets = this.allAssets();
+    const type = this.selectedType();
+    if (type === 'ALL') {
+      return assets;
+    }
+    return assets.filter((a) => a.assetType === type);
+  });
+
+  assetOptions = computed<DropdownOption[]>(() => {
+    return this.filteredAssets().map((a) => ({
+      value: a.id,
+      label: `${a.symbol} - ${a.name} (${a.assetType})`,
+    }));
+  });
 
   buyForm = new FormGroup({
     assetId: new FormControl(''),
@@ -81,10 +101,7 @@ export class BuyDialogComponent implements OnInit {
     this.loading.set(true);
     this.assetService.getAssets().subscribe({
       next: (assets) => {
-        this.assetOptions = assets.map((a) => ({
-          value: a.id,
-          label: `${a.symbol} - ${a.name}`,
-        }));
+        this.allAssets.set(assets);
         this.loading.set(false);
       },
       error: (err) => {
@@ -92,6 +109,20 @@ export class BuyDialogComponent implements OnInit {
         this.loading.set(false);
       },
     });
+  }
+
+  selectType(type: string): void {
+    this.selectedType.set(type);
+    
+    // Reset selection if the current selected asset is not in the filtered list
+    const currentAssetId = this.buyForm.controls.assetId.value;
+    if (currentAssetId && type !== 'ALL') {
+      const match = this.filteredAssets().some(a => a.id === currentAssetId);
+      if (!match) {
+        this.buyForm.controls.assetId.setValue('');
+        this.buyForm.controls.purchasePrice.setValue(null);
+      }
+    }
   }
 
   onSubmit(): void {

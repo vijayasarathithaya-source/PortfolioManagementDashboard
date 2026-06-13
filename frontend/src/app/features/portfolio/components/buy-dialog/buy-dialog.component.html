@@ -17,12 +17,22 @@
 
     <!-- Asset Selection (Dropdown if buying new, text if adding to existing) -->
     @if (isNew) {
+      <div class="type-filter-container">
+        <span class="filter-label">Filter Asset Type</span>
+        <div class="type-filter-group">
+          <button type="button" class="filter-pill" [class.active]="selectedType() === 'ALL'" (click)="selectType('ALL')">All</button>
+          <button type="button" class="filter-pill" [class.active]="selectedType() === 'Stocks'" (click)="selectType('Stocks')">Stocks</button>
+          <button type="button" class="filter-pill" [class.active]="selectedType() === 'Bonds'" (click)="selectType('Bonds')">Bonds</button>
+          <button type="button" class="filter-pill" [class.active]="selectedType() === 'Mutual Funds'" (click)="selectType('Mutual Funds')">Funds</button>
+        </div>
+      </div>
+
       <app-dropdown
         label="Select Asset"
         placeholder="Choose an asset to buy..."
         [control]="$any(buyForm.controls.assetId)"
         formControlName="assetId"
-        [options]="assetOptions"
+        [options]="assetOptions()"
         errorMsg="Please select an asset to buy"
       ></app-dropdown>
     } @else {
