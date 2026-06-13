@@ -1,1 +1,153 @@
-<p>dashboard works!</p>
+<app-page-header title="Dashboard" subtitle="Overview of your portfolio value and asset allocation"></app-page-header>
+
+<!-- Loading State -->
+@if (loading()) {
+  <app-loading-state type="skeleton-grid"></app-loading-state>
+} @else if (error()) {
+  <!-- Error Alert -->
+  <div class="error-alert-box animate-fade-in">
+    <span class="material-icons">error_outline</span>
+    <div class="error-details">
+      <h3>Error Loading Dashboard</h3>
+      <p>{{ error() }}</p>
+    </div>
+  </div>
+} @else {
+  <!-- Dashboard Stats Cards -->
+  <div class="stats-grid">
+    <!-- Total Value -->
+    <app-card>
+      <div class="stat-content">
+        <div class="stat-label">Total Value</div>
+        <div class="stat-value">{{ totalValue() | currency }}</div>
+        <div class="stat-meta">
+          <span class="material-icons icon-blue">account_balance</span>
+          <span>Current market value</span>
+        </div>
+      </div>
+    </app-card>
+
+    <!-- Total Cost -->
+    <app-card>
+      <div class="stat-content">
+        <div class="stat-label">Total Cost</div>
+        <div class="stat-value">{{ totalCost() | currency }}</div>
+        <div class="stat-meta">
+          <span class="material-icons icon-slate">shopping_bag</span>
+          <span>Total capital invested</span>
+        </div>
+      </div>
+    </app-card>
+
+    <!-- Total Profit / Loss -->
+    <app-card>
+      <div class="stat-content">
+        <div class="stat-label">Total Profit/Loss</div>
+        <div class="stat-value" [ngClass]="{'text-success': totalProfitLoss() > 0, 'text-danger': totalProfitLoss() < 0}">
+          {{ totalProfitLoss() | currency }}
+        </div>
+        <div class="stat-meta">
+          @if (totalProfitLoss() >= 0) {
+            <span class="material-icons text-success">trending_up</span>
+            <span class="text-success">Net profit</span>
+          } @else {
+            <span class="material-icons text-danger">trending_down</span>
+            <span class="text-danger">Net loss</span>
+          }
+        </div>
+      </div>
+    </app-card>
+
+    <!-- Return Percentage -->
+    <app-card>
+      <div class="stat-content">
+        <div class="stat-label">Return Rate</div>
+        <div class="stat-value" [ngClass]="{'text-success': returnPercentage() > 0, 'text-danger': returnPercentage() < 0}">
+          {{ returnPercentage() | number:'1.2-2' }}%
+        </div>
+        <div class="stat-meta">
+          @if (returnPercentage() >= 0) {
+            <span class="material-icons text-success font-small">arrow_upward</span>
+            <span class="text-success">Total yield</span>
+          } @else {
+            <span class="material-icons text-danger font-small">arrow_downward</span>
+            <span class="text-danger">Total yield</span>
+          }
+        </div>
+      </div>
+    </app-card>
+  </div>
+
+  <!-- Main Section -->
+  @if (holdings().length === 0) {
+    <!-- Empty State -->
+    <div class="empty-state-wrapper">
+      <app-empty-state
+        icon="folder_open"
+        title="No Investments Found"
+        description="You don't have any investments in your portfolio yet. Click the button below to buy your first asset."
+        buttonText="Buy Investment"
+        (action)="onBuyInvestment()"
+      ></app-empty-state>
+    </div>
+  } @else {
+    <!-- Dashboard Columns layout -->
+    <div class="dashboard-columns">
+      <!-- Holdings Grid -->
+      <div class="main-column">
+        <app-card title="My Holdings" subtitle="Active positions and yields in your portfolio">
+          <app-table [data]="holdings()" [columns]="tableColumns"></app-table>
+        </app-card>
+      </div>
+
+      <!-- Allocation & Side Widgets -->
+      <div class="side-column">
+        <!-- Asset Allocation Card -->
+        <app-card title="Asset Allocation" subtitle="Distribution of capital across asset types">
+          <div class="allocation-widget">
+            <!-- Allocation Segment Bar -->
+            <div class="segmented-bar">
+              @for (alloc of assetAllocation(); track alloc.type) {
+                @if (alloc.percentage > 0) {
+                  <div 
+                    class="bar-segment" 
+                    [style.width.%]="alloc.percentage" 
+                    [style.background-color]="alloc.color"
+                    [title]="alloc.type + ': ' + (alloc.percentage | number:'1.1-1') + '%'"
+                  ></div>
+                }
+              }
+            </div>
+
+            <!-- Allocation List Details -->
+            <div class="allocation-list">
+              @for (alloc of assetAllocation(); track alloc.type) {
+                <div class="allocation-item">
+                  <div class="alloc-type">
+                    <span class="legend-badge" [style.background-color]="alloc.color"></span>
+                    <span class="type-name">{{ alloc.type }}</span>
+                  </div>
+                  <div class="alloc-values">
+                    <span class="alloc-amount">{{ alloc.value | currency }}</span>
+                    <span class="alloc-pct">{{ alloc.percentage | number:'1.1-1' }}%</span>
+                  </div>
+                </div>
+              }
+            </div>
+          </div>
+        </app-card>
+
+        <!-- Total Assets Summary -->
+        <app-card>
+          <div class="assets-count-widget">
+            <div class="widget-details">
+              <span class="count-value">{{ assetsCount() }}</span>
+              <span class="count-label">Unique Assets</span>
+            </div>
+            <span class="material-icons widget-icon">pie_chart</span>
+          </div>
+        </app-card>
+      </div>
+    </div>
+  }
+}

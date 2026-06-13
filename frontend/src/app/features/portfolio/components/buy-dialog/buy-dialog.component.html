@@ -1,0 +1,65 @@
+<app-dialog
+  [title]="isNew ? 'Buy New Asset' : 'Buy Asset Position'"
+  confirmText="Buy"
+  cancelText="Cancel"
+  [loading]="loading"
+  [confirmDisabled]="buyForm.invalid"
+  (confirm)="onSubmit()"
+  (cancel)="onCancel()"
+>
+  <form [formGroup]="buyForm" class="dialog-form">
+    
+    @if (errorMessage) {
+      <div class="error-alert animate-fade-in">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <!-- Asset Selection (Dropdown if buying new, text if adding to existing) -->
+    @if (isNew) {
+      <app-dropdown
+        label="Select Asset"
+        placeholder="Choose an asset to buy..."
+        [control]="$any(buyForm.controls.assetId)"
+        formControlName="assetId"
+        [options]="assetOptions"
+        errorMsg="Please select an asset to buy"
+      ></app-dropdown>
+    } @else {
+      <div class="read-only-field">
+        <label class="field-label">Asset</label>
+        <div class="field-value">{{ assetName }} ({{ assetSymbol }})</div>
+      </div>
+    }
+
+    <!-- Quantity Input -->
+    <app-input
+      label="Quantity"
+      placeholder="e.g. 10"
+      type="number"
+      [control]="$any(buyForm.controls.quantity)"
+      formControlName="quantity"
+      errorMsg="Quantity must be greater than zero"
+    ></app-input>
+
+    <!-- Price Input -->
+    <app-input
+      label="Purchase Price"
+      placeholder="e.g. 150.25"
+      type="number"
+      [control]="$any(buyForm.controls.purchasePrice)"
+      formControlName="purchasePrice"
+      errorMsg="Price must be greater than zero"
+    ></app-input>
+
+    <!-- Date Picker (Only for new asset initial purchase date) -->
+    @if (isNew) {
+      <app-datepicker
+        label="Purchase Date"
+        [control]="$any(buyForm.controls.purchaseDate)"
+        formControlName="purchaseDate"
+      ></app-datepicker>
+    }
+
+  </form>
+</app-dialog>

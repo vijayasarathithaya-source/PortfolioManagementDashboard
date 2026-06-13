@@ -1,0 +1,35 @@
+.holdings-table-container {
+  margin-top: 24px;
+}
+
+.error-alert-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background-color: var(--color-danger-light);
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  margin-top: 24px;
+
+  span.material-icons {
+    font-size: 28px;
+  }
+
+  .error-details {
+    h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+      color: #991b1b;
+    }
+    p {
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+}
+
+.empty-state-wrapper {
+  margin-top: 24px;
+}

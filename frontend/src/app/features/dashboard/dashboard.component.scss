@@ -1,0 +1,250 @@
+// Dashboard Styling
+
+// Stats Cards Grid
+.stats-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+  margin-bottom: 24px;
+
+  @media (min-width: 600px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (min-width: 1200px) {
+    grid-template-columns: repeat(4, 1fr);
+  }
+}
+
+.stat-content {
+  display: flex;
+  flex-direction: column;
+  padding: 8px 4px;
+
+  .stat-label {
+    font-size: 13px;
+    color: var(--text-secondary);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 8px;
+  }
+
+  .stat-value {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.2;
+    margin-bottom: 8px;
+  }
+
+  .stat-meta {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+
+    span.material-icons {
+      font-size: 16px;
+    }
+
+    .icon-blue {
+      color: var(--color-primary);
+    }
+
+    .icon-slate {
+      color: var(--text-secondary);
+    }
+  }
+}
+
+// Layout Columns (Holdings on left, Allocation on right)
+.dashboard-columns {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+
+  @media (min-width: 960px) {
+    flex-direction: row;
+    align-items: flex-start;
+  }
+
+  .main-column {
+    flex: 1;
+    min-width: 0; // Prevent flex item overflow
+  }
+
+  .side-column {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    width: 100%;
+
+    @media (min-width: 960px) {
+      width: 340px;
+      flex-shrink: 0;
+    }
+  }
+}
+
+// Allocation Widget Styling
+.allocation-widget {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 4px 0;
+}
+
+.segmented-bar {
+  display: flex;
+  height: 12px;
+  background-color: var(--border-color);
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
+
+  .bar-segment {
+    height: 100%;
+    transition: width 0.5s ease-in-out;
+  }
+}
+
+.allocation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.allocation-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #f1f5f9;
+
+  &:last-child {
+    border-bottom: none;
+    padding-bottom: 0;
+  }
+
+  .alloc-type {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    .legend-badge {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .type-name {
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+  }
+
+  .alloc-values {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+
+    .alloc-amount {
+      font-weight: 600;
+      color: var(--text-primary);
+    }
+
+    .alloc-pct {
+      font-size: 12px;
+      color: var(--text-secondary);
+      background-color: #f1f5f9;
+      padding: 2px 6px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+  }
+}
+
+// Total Assets Widget
+.assets-count-widget {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 4px;
+
+  .widget-details {
+    display: flex;
+    flex-direction: column;
+
+    .count-value {
+      font-family: var(--font-display);
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .count-label {
+      font-size: 13px;
+      color: var(--text-secondary);
+      font-weight: 500;
+    }
+  }
+
+  .widget-icon {
+    font-size: 40px;
+    color: var(--color-primary-light);
+  }
+}
+
+// Error Box Styling
+.error-alert-box {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  background-color: var(--color-danger-light);
+  border: 1px solid #fca5a5;
+  color: #b91c1c;
+  padding: 20px;
+  border-radius: var(--radius-lg);
+  margin-bottom: 24px;
+
+  span.material-icons {
+    font-size: 28px;
+  }
+
+  .error-details {
+    h3 {
+      font-size: 16px;
+      margin-bottom: 4px;
+      color: #991b1b;
+    }
+    p {
+      font-size: 14px;
+      margin: 0;
+    }
+  }
+}
+
+// General Utilities
+.text-success {
+  color: var(--color-success) !important;
+}
+
+.text-danger {
+  color: var(--color-danger) !important;
+}
+
+.font-small {
+  font-size: 14px !important;
+}
+
+.empty-state-wrapper {
+  margin-top: 24px;
+}

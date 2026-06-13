@@ -1,0 +1,51 @@
+<app-dialog
+  title="Sell Asset Position"
+  confirmText="Sell"
+  cancelText="Cancel"
+  [loading]="loading"
+  [confirmDisabled]="sellForm.invalid"
+  (confirm)="onSubmit()"
+  (cancel)="onCancel()"
+>
+  <form [formGroup]="sellForm" class="dialog-form">
+    
+    @if (errorMessage) {
+      <div class="error-alert animate-fade-in">
+        {{ errorMessage }}
+      </div>
+    }
+
+    <!-- Pre-filled Asset Display -->
+    <div class="read-only-field">
+      <label class="field-label">Asset</label>
+      <div class="field-value">{{ assetName }} ({{ assetSymbol }})</div>
+    </div>
+
+    <!-- Pre-filled Available Balance Display -->
+    <div class="read-only-field accent-field">
+      <label class="field-label">Available to Sell</label>
+      <div class="field-value">{{ maxQuantity | number }} units</div>
+    </div>
+
+    <!-- Quantity to Sell Input -->
+    <app-input
+      label="Quantity to Sell"
+      placeholder="e.g. 5"
+      type="number"
+      [control]="$any(sellForm.controls.quantity)"
+      formControlName="quantity"
+      [errorMsg]="'Quantity must be between 0.00001 and ' + maxQuantity"
+    ></app-input>
+
+    <!-- Price Input -->
+    <app-input
+      label="Selling Price"
+      placeholder="e.g. 155.00"
+      type="number"
+      [control]="$any(sellForm.controls.price)"
+      formControlName="price"
+      errorMsg="Price must be greater than zero"
+    ></app-input>
+
+  </form>
+</app-dialog>

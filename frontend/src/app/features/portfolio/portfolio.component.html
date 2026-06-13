@@ -1,1 +1,50 @@
-<p>portfolio works!</p>
+<app-page-header title="Holdings" description="Add, manage, and sell assets from your active positions">
+  <div page-actions>
+    <app-button
+      variant="raised"
+      color="primary"
+      label="Buy Asset"
+      icon="add"
+      (btnClick)="onBuyNew()"
+    ></app-button>
+  </div>
+</app-page-header>
+
+<!-- Loading State -->
+@if (loading()) {
+  <app-loading-state type="skeleton-grid"></app-loading-state>
+} @else if (error()) {
+  <!-- Error Alert -->
+  <div class="error-alert-box animate-fade-in">
+    <span class="material-icons">error_outline</span>
+    <div class="error-details">
+      <h3>Error Loading Holdings</h3>
+      <p>{{ error() }}</p>
+    </div>
+  </div>
+} @else {
+  <!-- Holdings Content -->
+  @if (holdings().length === 0) {
+    <!-- Empty State -->
+    <div class="empty-state-wrapper">
+      <app-empty-state
+        icon="account_balance_wallet"
+        title="No holdings found"
+        description="You do not own any asset positions yet. Click the button below to buy your first investment."
+        buttonText="Buy Asset"
+        (action)="onBuyNew()"
+      ></app-empty-state>
+    </div>
+  } @else {
+    <!-- Holdings Table -->
+    <div class="holdings-table-container">
+      <app-card>
+        <app-table 
+          [data]="holdings()" 
+          [columns]="tableColumns"
+          (actionClick)="onTableAction($event)"
+        ></app-table>
+      </app-card>
+    </div>
+  }
+}
