@@ -1,0 +1,94 @@
+PORTFOLIO CALCULATIONS GUIDE
+
+This document explains the mathematical formulas and implementation details used to compute profit, loss, and return rates in the Portfolio Management Application.
+
+=========================================
+1. INDIVIDUAL HOLDINGS
+=========================================
+
+For each investment in a user's portfolio, the application calculates the current position metrics.
+
+Formulas:
+- Total Cost: The total amount spent to acquire the position.
+  Formula: Total Cost = Purchase Price * Quantity
+
+- Current Value: The market value of the position based on the latest asset price.
+  Formula: Current Value = Current Price * Quantity
+
+- Profit / Loss (Gain): The net gain or loss on the position.
+  Formula: Profit/Loss = Current Value - Total Cost
+
+- Return Percentage: The percentage gain or loss relative to the original purchase price.
+  Formula: Return % = ((Current Price - Purchase Price) / Purchase Price) * 100
+  * Note: If the purchase price is 0, the return rate defaults to 0% to prevent division-by-zero errors.
+
+Code Implementation Path:
+- File: backend/src/application/services/portfolio.service.ts
+- Location: Inside the getHoldings(userId) method
+- Code Snippet:
+  const currentValue = currentPrice * inv.quantity;
+  const cost = inv.purchasePrice * inv.quantity;
+  const profitLoss = currentValue - cost;
+  const returnPercentage = inv.purchasePrice === 0 ? 0 : ((currentPrice - inv.purchasePrice) / inv.purchasePrice) * 100;
+
+=========================================
+2. OVERALL PORTFOLIO SUMMARY
+=========================================
+
+The overall portfolio summary aggregates the values of all holdings.
+
+Formulas:
+- Total Portfolio Cost: The sum of the costs of all active holdings.
+  Formula: Total Portfolio Cost = Sum of (Purchase Price * Quantity) for all holdings
+
+- Total Portfolio Value: The sum of the current market values of all active holdings.
+  Formula: Total Portfolio Value = Sum of (Current Value) for all holdings
+
+- Total Profit / Loss: The overall net gain or loss of the entire portfolio.
+  Formula: Total Profit/Loss = Total Portfolio Value - Total Portfolio Cost
+
+- Total Return Percentage: The relative growth or decline of the entire portfolio.
+  Formula: Total Return % = (Total Profit/Loss / Total Portfolio Cost) * 100
+  * Note: If the total portfolio cost is 0, the return rate defaults to 0% to prevent division-by-zero errors.
+
+Code Implementation Path:
+- File: backend/src/application/services/portfolio.service.ts
+- Location: Inside the getSummary(userId) method
+- Code Snippet:
+  for (const h of holdings) {
+    totalCost += h.purchasePrice * h.quantity;
+    totalValue += h.currentValue;
+  }
+  const totalProfitLoss = totalValue - totalCost;
+  const returnPercentage = totalCost === 0 ? 0 : (totalProfitLoss / totalCost) * 100;
+
+=========================================
+3. CALCULATION EXAMPLE
+=========================================
+
+Assume a user has the following investments:
+
+| Asset | Quantity | Purchase Price | Current Price |
+|-------|----------|----------------|---------------|
+| AAPL  | 10       | $150.00        | $180.00       |
+| MSFT  | 5        | $300.00        | $280.00       |
+
+Step-by-Step Computations:
+
+Holding 1 (AAPL):
+- Total Cost: 10 * $150 = $1,500
+- Current Value: 10 * $180 = $1,800
+- Profit/Loss: $1,800 - $1,500 = +$300
+- Return %: (($180 - $150) / $150) * 100 = +20%
+
+Holding 2 (MSFT):
+- Total Cost: 5 * $300 = $1,500
+- Current Value: 5 * $280 = $1,400
+- Profit/Loss: $1,400 - $1,500 = -$100
+- Return %: (($280 - $300) / $300) * 100 = -6.67%
+
+Portfolio Summary:
+- Total Portfolio Cost: $1,500 (AAPL) + $1,500 (MSFT) = $3,000
+- Total Portfolio Value: $1,800 (AAPL) + $1,400 (MSFT) = $3,200
+- Total Profit/Loss: $3,200 - $3,000 = +$200
+- Total Return %: (+$200 / $3,000) * 100 = +6.67%
