@@ -1,1 +1,10 @@
 node_modules
+dist
+tests/**/*.js
+tests/**/*.js.map
+tests/**/*.d.ts
+tests/**/*.d.ts.map
+database.sqlite
+.env
+keys/
+*.pem

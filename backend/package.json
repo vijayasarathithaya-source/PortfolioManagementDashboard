@@ -2,9 +2,11 @@
   "name": "portfolio-management-api",
   "version": "1.0.0",
   "description": "Portfolio Management Dashboard API",
-  "main": "src/server.ts",
+  "main": "dist/server.js",
   "type": "module",
   "scripts": {
+    "dev": "node --env-file=.env --loader ts-node/esm src/server.ts",
+    "start": "node --env-file=.env dist/server.js",
     "test": "NODE_OPTIONS=--experimental-vm-modules jest --passWithNoTests",
     "build": "tsc"
   },
