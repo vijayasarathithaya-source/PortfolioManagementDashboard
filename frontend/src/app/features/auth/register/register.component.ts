@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators, AbstractControl } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -33,9 +33,9 @@ export class RegisterComponent {
     }
   );
 
-  loading = false;
-  errorMessage = '';
-  successMessage = '';
+  loading = signal(false);
+  errorMessage = signal('');
+  successMessage = signal('');
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -54,22 +54,20 @@ export class RegisterComponent {
       return;
     }
 
-    this.loading = true;
-    this.errorMessage = '';
-    this.successMessage = '';
+    this.loading.set(true);
+    this.errorMessage.set('');
+    this.successMessage.set('');
     const { email, password } = this.registerForm.value;
 
     this.authService.register(email!, password!).subscribe({
       next: () => {
-        this.loading = false;
-        this.successMessage = 'Registration successful! Redirecting to login...';
-        setTimeout(() => {
-          this.router.navigate(['/auth/login']);
-        }, 2000);
+        this.loading.set(false);
+        this.successMessage.set('Registration successful! Please login.');
+        setTimeout(() => this.router.navigate(['/auth/login']), 2000);
       },
       error: (err) => {
-        this.loading = false;
-        this.errorMessage = err.error?.error || 'Registration failed. Please try again.';
+        this.loading.set(false);
+        this.errorMessage.set(err.error?.error || 'Registration failed');
       },
     });
   }

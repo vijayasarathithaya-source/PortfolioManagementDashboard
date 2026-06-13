@@ -9,12 +9,25 @@
 
   <input
     matInput
-    [type]="type()"
+    [type]="type() === 'password' ? (hidePassword() ? 'password' : 'text') : type()"
     [placeholder]="placeholder()"
     [formControl]="control()"
     (input)="onInput($event)"
     (blur)="onTouched()"
   />
+
+  @if (type() === 'password') {
+    <button
+      type="button"
+      mat-icon-button
+      matSuffix
+      (click)="togglePasswordVisibility($event)"
+      class="password-toggle-btn"
+      aria-label="Toggle password visibility"
+    >
+      <mat-icon>{{ hidePassword() ? 'visibility_off' : 'visibility' }}</mat-icon>
+    </button>
+  }
 
   @if (hint()) {
     <mat-hint>{{ hint() }}</mat-hint>

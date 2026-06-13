@@ -43,4 +43,33 @@ describe('InputComponent', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     expect(compiled.querySelector('mat-error')?.textContent).toContain('This field is required');
   });
+
+  it('should not show password toggle button if type is not password', () => {
+    fixture.componentRef.setInput('type', 'text');
+    fixture.detectChanges();
+    const button = fixture.nativeElement.querySelector('.password-toggle-btn');
+    expect(button).toBeNull();
+  });
+
+  it('should show password toggle button and toggle input type when clicked', () => {
+    fixture.componentRef.setInput('type', 'password');
+    fixture.detectChanges();
+
+    const button = fixture.nativeElement.querySelector('.password-toggle-btn');
+    expect(button).toBeTruthy();
+
+    const input = fixture.nativeElement.querySelector('input');
+    expect(input.type).toBe('password');
+
+    // Click toggle button
+    button.click();
+    fixture.detectChanges();
+    expect(input.type).toBe('text');
+
+    // Click toggle button again
+    button.click();
+    fixture.detectChanges();
+    expect(input.type).toBe('password');
+  });
 });
+

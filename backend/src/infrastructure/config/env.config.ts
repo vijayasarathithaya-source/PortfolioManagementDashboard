@@ -21,5 +21,10 @@ export const EnvConfig = {
       throw new Error('JWT_PUBLIC_KEY_PATH environment variable is not defined');
     }
     return path;
+  },
+
+  get CORS_ORIGIN(): string[] {
+    const origin = process.env.CORS_ORIGIN || 'http://localhost:4200';
+    return origin.split(',').map(o => o.trim());
   }
 };

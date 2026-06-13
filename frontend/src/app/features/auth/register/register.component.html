@@ -1,17 +1,21 @@
 <div class="auth-page-container">
   <div class="auth-card-wrapper">
+    <div class="auth-brand">
+      <span class="material-icons brand-icon">donut_large</span>
+      <h1 class="brand-title">Portfolio Management</h1>
+    </div>
     <app-card title="Create Account" subtitle="Register a new account to start managing assets.">
       <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form">
         
-        @if (errorMessage) {
+        @if (errorMessage()) {
           <div class="error-alert animate-fade-in">
-            {{ errorMessage }}
+            {{ errorMessage() }}
           </div>
         }
 
-        @if (successMessage) {
+        @if (successMessage()) {
           <div class="success-alert animate-fade-in">
-            {{ successMessage }}
+            {{ successMessage() }}
           </div>
         }
 
@@ -50,7 +54,7 @@
             type="submit"
             variant="raised"
             color="primary"
-            [loading]="loading"
+            [loading]="loading()"
             label="Register"
           ></app-button>
         </div>

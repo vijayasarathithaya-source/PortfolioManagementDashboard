@@ -1,14 +1,22 @@
-import { Component, input, forwardRef, OnInit } from '@angular/core';
+import { Component, input, forwardRef, OnInit, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, ReactiveFormsModule, FormControl } from '@angular/forms';
 
 @Component({
   selector: 'app-input',
   standalone: true,
-  imports: [CommonModule, MatFormFieldModule, MatInputModule, MatIconModule, ReactiveFormsModule],
+  imports: [
+    CommonModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatIconModule,
+    MatButtonModule,
+    ReactiveFormsModule,
+  ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
@@ -30,6 +38,7 @@ export class InputComponent implements ControlValueAccessor, OnInit {
 
   value: any = '';
   disabled = false;
+  hidePassword = signal<boolean>(true);
 
   onChange: any = () => {};
   onTouched: any = () => {};
@@ -40,6 +49,12 @@ export class InputComponent implements ControlValueAccessor, OnInit {
         this.onTouched();
       }
     });
+  }
+
+  togglePasswordVisibility(event: Event): void {
+    event.preventDefault();
+    event.stopPropagation();
+    this.hidePassword.update((val) => !val);
   }
 
   onInput(event: Event): void {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
@@ -27,8 +27,8 @@ export class LoginComponent {
     password: new FormControl('', [Validators.required, Validators.minLength(6)]),
   });
 
-  loading = false;
-  errorMessage = '';
+  loading = signal(false);
+  errorMessage = signal('');
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -38,18 +38,18 @@ export class LoginComponent {
       return;
     }
 
-    this.loading = true;
-    this.errorMessage = '';
+    this.loading.set(true);
+    this.errorMessage.set('');
     const { email, password } = this.loginForm.value;
 
     this.authService.login(email!, password!).subscribe({
       next: () => {
-        this.loading = false;
+        this.loading.set(false);
         this.router.navigate(['/dashboard']);
       },
       error: (err) => {
-        this.loading = false;
-        this.errorMessage = err.error?.error || 'Invalid email or password';
+        this.loading.set(false);
+        this.errorMessage.set(err.error?.error || 'Invalid email or password');
       },
     });
   }
