@@ -1,6 +1,6 @@
 import { When, Then } from '@cucumber/cucumber';
 import axios from 'axios';
-import { expect, state, BACKEND_URL } from '../support/state';
+import { expect, state, BACKEND_URL } from '../../support/state';
 
 When('the dashboard is opened', async () => {
   try {

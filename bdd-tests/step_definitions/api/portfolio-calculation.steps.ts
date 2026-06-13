@@ -1,5 +1,5 @@
 import { Given, When, Then } from '@cucumber/cucumber';
-import { expect, state } from '../support/state';
+import { expect, state } from '../../support/state';
 
 Given('quantity is {int}', (q: number) => {
   state.qty = q;

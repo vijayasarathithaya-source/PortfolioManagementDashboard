@@ -1,6 +1,6 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import axios from 'axios';
-import { expect, state, BACKEND_URL } from '../support/state';
+import { expect, state, BACKEND_URL } from '../../support/state';
 
 When('the user calls protected portfolio API with valid JWT token', async () => {
   try {

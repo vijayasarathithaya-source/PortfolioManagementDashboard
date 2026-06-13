@@ -1,8 +1,8 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import axios from 'axios';
 import { randomUUID } from 'crypto';
-import { getDb } from '../support/db';
-import { expect, state, BACKEND_URL } from '../support/state';
+import { getDb } from '../../support/db';
+import { expect, state, BACKEND_URL } from '../../support/state';
 
 Given('transactions exist for the user', async () => {
   const db = await getDb();

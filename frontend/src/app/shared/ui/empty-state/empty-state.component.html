@@ -5,6 +5,15 @@
   <h3 class="empty-title">{{ title() }}</h3>
   <p class="empty-description">{{ description() }}</p>
   <div class="empty-actions">
+    @if (buttonText()) {
+      <app-button
+        variant="raised"
+        color="primary"
+        [label]="buttonText() || ''"
+        (btnClick)="onAction()"
+      ></app-button>
+    }
     <ng-content></ng-content>
   </div>
 </div>
+

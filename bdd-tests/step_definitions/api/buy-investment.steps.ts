@@ -1,7 +1,7 @@
 import { When, Then } from '@cucumber/cucumber';
 import axios from 'axios';
-import { getDb } from '../support/db';
-import { expect, state, BACKEND_URL } from '../support/state';
+import { getDb } from '../../support/db';
+import { expect, state, BACKEND_URL } from '../../support/state';
 
 When('the user buys asset {string} with quantity {int} and price {float}', async (symbol, quantity, price) => {
   const db = await getDb();

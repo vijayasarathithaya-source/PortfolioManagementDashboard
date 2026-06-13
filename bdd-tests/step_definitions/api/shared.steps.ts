@@ -1,8 +1,8 @@
 import { Given, Then } from '@cucumber/cucumber';
 import axios from 'axios';
 import { randomUUID } from 'crypto';
-import { getDb } from '../support/db';
-import { expect, state, BACKEND_URL } from '../support/state';
+import { getDb } from '../../support/db';
+import { expect, state, BACKEND_URL } from '../../support/state';
 
 Given('the user is authenticated as {string} with password {string}', async (email, password) => {
   state.currentEmail = email;

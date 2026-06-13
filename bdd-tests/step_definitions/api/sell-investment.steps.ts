@@ -1,8 +1,8 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import axios from 'axios';
 import { randomUUID } from 'crypto';
-import { getDb } from '../support/db';
-import { expect, state, BACKEND_URL } from '../support/state';
+import { getDb } from '../../support/db';
+import { expect, state, BACKEND_URL } from '../../support/state';
 
 Given('the user has investment for {string} with quantity {int} and purchase price {float}', async (symbol, quantity, price) => {
   const db = await getDb();

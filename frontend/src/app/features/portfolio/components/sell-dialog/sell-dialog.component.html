@@ -3,7 +3,7 @@
   confirmText="Sell"
   cancelText="Cancel"
   [loading]="loading()"
-  [confirmDisabled]="sellForm.invalid"
+  [confirmDisabled]="isSubmitDisabled"
   (confirm)="onSubmit()"
   (cancel)="onCancel()"
 >

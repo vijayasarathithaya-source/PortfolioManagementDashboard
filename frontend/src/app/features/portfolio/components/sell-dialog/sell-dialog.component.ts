@@ -63,7 +63,21 @@ export class SellDialogComponent implements OnInit {
     });
   }
 
+  get isSubmitDisabled(): boolean {
+    const qtyControl = this.sellForm.controls.quantity;
+    const priceControl = this.sellForm.controls.price;
+    return !!(qtyControl.errors?.['required'] || 
+           qtyControl.errors?.['min'] || 
+           priceControl.invalid);
+  }
+
   onSubmit(): void {
+    const qtyControl = this.sellForm.controls.quantity;
+    if (qtyControl.value && qtyControl.value > this.maxQuantity) {
+      this.errorMessage.set('Insufficient quantity to sell');
+      return;
+    }
+
     if (this.sellForm.invalid) {
       this.sellForm.markAllAsTouched();
       return;

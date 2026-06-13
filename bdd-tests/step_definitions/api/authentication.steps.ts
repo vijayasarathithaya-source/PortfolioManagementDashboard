@@ -1,7 +1,7 @@
 import { Given, When, Then } from '@cucumber/cucumber';
 import axios from 'axios';
-import { getDb } from '../support/db';
-import { expect, state, BACKEND_URL } from '../support/state';
+import { getDb } from '../../support/db';
+import { expect, state, BACKEND_URL } from '../../support/state';
 
 Given('the user exists with email {string} and password {string} and name {string}', async (email, password, name) => {
   state.currentEmail = email;

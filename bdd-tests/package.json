@@ -4,11 +4,14 @@
   "description": "Cucumber BDD Integration tests for Portfolio Management Dashboard",
   "main": "index.js",
   "scripts": {
-    "test": "BACKEND_URL=http://localhost:3000 cucumber-js"
+    "test": "npm run test:api && npm run test:ui",
+    "test:api": "BACKEND_URL=http://localhost:3000 cucumber-js --require 'support/db.ts' --require 'support/state.ts' --require 'step_definitions/api/**/*.ts' requirements/api/**/*.feature",
+    "test:ui": "BACKEND_URL=http://localhost:3000 FRONTEND_URL=http://localhost:4200 cucumber-js --require 'support/db.ts' --require 'support/ui-world.ts' --require 'step_definitions/ui/**/*.ts' requirements/ui/**/*.feature"
   },
   "dependencies": {
     "@cucumber/cucumber": "^10.9.0",
     "axios": "^1.7.9",
+    "playwright": "^1.60.0",
     "sqlite": "^5.1.1",
     "sqlite3": "^5.1.7",
     "ts-node": "^10.9.2",
