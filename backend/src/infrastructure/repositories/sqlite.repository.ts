@@ -241,7 +241,7 @@ export class SqliteTransactionRepository implements ITransactionRepository {
     }
   ): Promise<Transaction[]> {
     let query = `
-      SELECT t.* FROM transactions t
+      SELECT t.*, a.symbol, a.name, a.assetType FROM transactions t
       JOIN investments i ON t.investmentId = i.id
       JOIN assets a ON i.assetId = a.id
       WHERE i.userId = ?
@@ -273,6 +273,9 @@ export class SqliteTransactionRepository implements ITransactionRepository {
       quantity: row.quantity,
       price: row.price,
       transactionDate: new Date(row.transactionDate),
+      symbol: row.symbol,
+      name: row.name,
+      assetType: row.assetType as AssetType,
     }));
   }
 

@@ -1,1 +1,85 @@
-<p>transactions works!</p>
+<app-page-header title="Transactions" description="Filter and review your investment transactions"></app-page-header>
+
+<!-- Filters Card -->
+<div class="filters-container">
+  <app-card>
+    <form [formGroup]="filterForm" class="filters-form">
+      <div class="filter-fields">
+        <!-- Asset Type -->
+        <app-dropdown
+          label="Asset Type"
+          [control]="$any(filterForm.controls.assetType)"
+          formControlName="assetType"
+          [options]="assetOptions"
+        ></app-dropdown>
+
+        <!-- Transaction Type -->
+        <app-dropdown
+          label="Transaction Type"
+          [control]="$any(filterForm.controls.transactionType)"
+          formControlName="transactionType"
+          [options]="typeOptions"
+        ></app-dropdown>
+
+        <!-- Start Date -->
+        <app-datepicker
+          label="From Date"
+          [control]="$any(filterForm.controls.startDate)"
+          formControlName="startDate"
+        ></app-datepicker>
+
+        <!-- End Date -->
+        <app-datepicker
+          label="To Date"
+          [control]="$any(filterForm.controls.endDate)"
+          formControlName="endDate"
+        ></app-datepicker>
+      </div>
+
+      <div class="filter-actions">
+        <app-button
+          variant="stroked"
+          color="basic"
+          label="Reset Filters"
+          icon="restart_alt"
+          (btnClick)="onResetFilters()"
+        ></app-button>
+      </div>
+    </form>
+  </app-card>
+</div>
+
+<!-- Loading State -->
+@if (loading()) {
+  <app-loading-state type="skeleton-grid"></app-loading-state>
+} @else if (error()) {
+  <!-- Error Alert -->
+  <div class="error-alert-box animate-fade-in">
+    <span class="material-icons">error_outline</span>
+    <div class="error-details">
+      <h3>Error Loading History</h3>
+      <p>{{ error() }}</p>
+    </div>
+  </div>
+} @else {
+  <!-- Transaction Logs Content -->
+  @if (transactionsList().length === 0) {
+    <!-- Empty State -->
+    <div class="empty-state-wrapper">
+      <app-empty-state
+        icon="history"
+        title="No transactions found"
+        description="No transaction records match your selected filter criteria. Try broadening your dates or changing filter parameters."
+        buttonText="Reset Filters"
+        (action)="onResetFilters()"
+      ></app-empty-state>
+    </div>
+  } @else {
+    <!-- Transactions Table -->
+    <div class="transactions-table-container">
+      <app-card>
+        <app-table [data]="transactionsList()" [columns]="tableColumns"></app-table>
+      </app-card>
+    </div>
+  }
+}

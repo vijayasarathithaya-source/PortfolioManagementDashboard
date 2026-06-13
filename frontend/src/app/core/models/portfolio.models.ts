@@ -33,6 +33,9 @@ export interface Transaction {
   quantity: number;
   price: number;
   transactionDate: Date;
+  symbol?: string;
+  name?: string;
+  assetType?: AssetType;
 }
 
 export interface Holding {
